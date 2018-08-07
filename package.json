@@ -10,6 +10,9 @@
     "debug": "~2.6.9",
     "express": "~4.16.0",
     "express-session": "^1.15.6",
+    "level": "^4.0.0",
+    "xlsx-populate": "^1.17.0",
+    "nodemailer": "^4.6.7",
     "morgan": "~1.9.0"
   }
 }
