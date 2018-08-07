@@ -5,15 +5,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Login</title>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/bootstrap-v4.0.0.min.css">
+    <!-- VUE.js 生产环境版本，优化了尺寸和速度 -->
+    <script src="js/vue-v2.5.16.js"></script>
+    <!-- vue-tables-2.js -->
+    <script src="js/vue-tables-2.min.js"></script>
+    <!-- axios -->
+    <script src="js/axios-v0.18.0.min.js"></script>
 </head>
 <body>
-    <div>
-        <h1>Login</h1>
+    <div class="container-fluid" id="app">
+        <div class="row">
+            <div class="col-md-12 text-center" >
+                <h1>Login</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12" >
+                <input 
+                v-model="user.name"
+                type="text" 
+                class="form-control"
+                placeholder="Username">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12" >
+                <input 
+                v-model="user.pass"
+                type="text" 
+                class="form-control"
+                placeholder="passphare"> 
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12" >
+                <button 
+                @click="login()"
+                :disabled="user.name=='' || user.pass=='' || busy==true"
+                type="button"
+                class="btn btn-dark btn-block btn-lg ">
+                Login</button>
+            </div>
+        </div>
     </div>
-    <div>
-        <input type="text" name="" id="" placeholder="Username">
-        <input type="text" name="" id="" placeholder="Password">
-    </div>
-    
+
 </body>
+<!-- Vue setup should be at the end. -->
+<script src="func.js"></script>
+<script src="login.js"></script>
 </html>

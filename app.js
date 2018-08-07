@@ -18,10 +18,12 @@ app.use(cookieParser());
 app.use(session(config.session))
 
 // if *.html, use auth functions. 
-app.all(/[a-zA-Z0-9]+\.html/, util.checkCrendential);
+// app.all(/[a-zA-Z0-9]+\.html/, util.checkCrendential);
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public/html')));
+app.use(express.static(path.join(__dirname, 'public/html.js')));
+app.use(express.static(path.join(__dirname, 'public/static')));
 
 app.use('/api', api);
 
