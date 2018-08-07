@@ -6,3 +6,12 @@ body {
 a {
   color: #00B7FF;
 }
+
+.row{
+  margin-top: 5px;
+}
+
+.round-btn{
+  width: 100px;
+  height: 100px;
+}
