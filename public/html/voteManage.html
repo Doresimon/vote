@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vote</title>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/bootstrap-v4.0.0.min.css">
+    <!-- VUE.js -->
+    <script src="js/vue-v2.5.16.js"></script>
+    <!-- vue-tables-2.js -->
+    <script src="js/vue-tables-2.min.js"></script>
+    <!-- axios -->
+    <script src="js/axios-v0.18.0.min.js"></script>
+    <!-- jquery, bootstrap -->
+    <script src="js/jquery-v3.2.1.slim.min.js"></script>
+    <script src="js/popper-v1.12.9.min.js"></script>
+    <script src="js/bootstrap-v4.0.0.min.js"></script>
+    <!-- icons -->
+    <script src="https://unpkg.com/ionicons@4.2.2/dist/ionicons.js"></script>
+</head>
+<body>
+    <div class="container-fluid" id="app">
+        <div class="row">
+            <div class="col-md-12 text-center" >
+                <h1>{{vote.title}}</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-center" >
+                <button 
+                type="button"
+                data-toggle="modal" 
+                data-target="#MODAL-ADD-VOTE"
+                class="btn btn-outline-dark btn-lg rounded-circle round-btn-100"
+                ><ion-icon name="add" size="large"></ion-icon></button>
+            </div>
+        </div>
+        <div class="row">
+            <div v-for="(v, i) in voteList" class="col-md-4 text-center" >
+                <button 
+                type="button"
+                data-toggle="tooltip"
+                title="something here"
+                class="btn btn-outline-dark btn-lg rounded-circle round-btn-200"
+                ><ion-icon name="play"></ion-icon> {{v.title}}</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12" >
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="MODAL-ADD-VOTE" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Vote</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">title</span>
+                        </div>
+                        <input 
+                        v-model.trim="add.title"
+                        type="text" 
+                        class="form-control" 
+                        placeholder="选举名称">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">executer number</span>
+                        </div>
+                        <input 
+                        v-model.number="add.num.executer"
+                        type="number" 
+                        class="form-control" 
+                        min="1">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">participant number</span>
+                        </div>
+                        <input 
+                        v-model.number="add.num.participant"
+                        type="number" 
+                        class="form-control" 
+                        min="1">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">target number</span>
+                        </div>
+                        <input 
+                        v-model.number="add.num.target"
+                        type="number" 
+                        class="form-control" 
+                        min="1">
+                    </div>
+                </div>
+                <div class="row">
+                    <!-- participants -->
+                </div>
+            </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button 
+                @click="addVote()"
+                :disabled="add.title==''||busy"
+                type="button" 
+                class="btn btn-primary"
+                >Add</button>
+            </div>
+        </div>
+        </div>
+        </div>
+
+    </div>
+</body>
+<!-- Vue setup should be at the end. -->
+<script src="func.js"></script>
+<script src="dashboard.js"></script>
+<script src="execute.js"></script>
+</html>
