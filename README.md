@@ -27,3 +27,7 @@ set up leveldb directory and files.
 
 <ion-icon name="add" size="large"></ion-icon>
 ```
+
+## repo statistics
+
+[openhub](https://www.openhub.net/p/Doresimon-vote)

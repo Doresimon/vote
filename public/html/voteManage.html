@@ -33,7 +33,7 @@
                 <button 
                 type="button"
                 data-toggle="modal" 
-                data-target="#MODAL-ADD-VOTE"
+                data-target="#MODAL-ADD-PARTICIPANT"
                 class="btn btn-outline-dark btn-lg rounded-circle round-btn-100"
                 ><ion-icon name="add" size="large"></ion-icon></button>
             </div>
@@ -54,11 +54,11 @@
         </div>
 
         <!-- Modal -->
-        <div class="modal fade" id="MODAL-ADD-VOTE" tabindex="-1" role="dialog">
+        <div class="modal fade" id="MODAL-ADD-PARTICIPANT" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Add Vote</h5>
+                <h5 class="modal-title">Add Participant</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>
@@ -66,63 +66,20 @@
             <div class="modal-body">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">title</span>
-                        </div>
-                        <input 
-                        v-model.trim="add.title"
-                        type="text" 
-                        class="form-control" 
-                        placeholder="选举名称">
+                    <div class="col-md-12">
+                        <textarea 
+                        v-model="add.participantStr"
+                        cols="30" rows="10"
+                        ></textarea>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">executer number</span>
-                        </div>
-                        <input 
-                        v-model.number="add.num.executer"
-                        type="number" 
-                        class="form-control" 
-                        min="1">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">participant number</span>
-                        </div>
-                        <input 
-                        v-model.number="add.num.participant"
-                        type="number" 
-                        class="form-control" 
-                        min="1">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">target number</span>
-                        </div>
-                        <input 
-                        v-model.number="add.num.target"
-                        type="number" 
-                        class="form-control" 
-                        min="1">
-                    </div>
-                </div>
-                <div class="row">
-                    <!-- participants -->
                 </div>
             </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button 
-                @click="addVote()"
-                :disabled="add.title==''||busy"
+                @click="parse()"
+                :disabled="add.participantStr==''||busy"
                 type="button" 
                 class="btn btn-primary"
                 >Add</button>
@@ -135,6 +92,6 @@
 </body>
 <!-- Vue setup should be at the end. -->
 <script src="func.js"></script>
-<script src="dashboard.js"></script>
+<script src="voteManage.js"></script>
 <script src="execute.js"></script>
 </html>
