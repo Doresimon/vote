@@ -12,7 +12,7 @@ const hour = 60*60*1000
 router.post('/auth', async function(req, res, next) {
   let name = req.body.name
   let pass = req.body.pass
-  let db = level('./LEVELDB/user')
+  let db = DBUtil.root.user.db
   
   let data = {
     ok: true,
@@ -26,11 +26,12 @@ router.post('/auth', async function(req, res, next) {
     let c = crypto.randomBytes(256).toString('hex')
     req.session.cred = c;
     res.cookie('cred', c, { maxAge: 0.1*hour });
+    req.session.name = name;
+    res.cookie('name', name, { maxAge: 0.1*hour });
   }else{
     data.ok = false
   }
 
-  await db.close()
   res.send(data);
 });
 
@@ -55,7 +56,6 @@ router.post('/vote/:method', async function(req, res, next) {
       res.send("hello???");
       break;
   }
-
   
 });
 

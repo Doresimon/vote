@@ -3,29 +3,26 @@ let DBUtil = require('../module/leveldb');
  
 let vote = {
     addVote: async function(D){
-        let db_vote = level('./LEVELDB/vote')
-        let db_vote_list = level('./LEVELDB/vote/list')
+        let db_vote = DBUtil.root.vote.db
+        let db_vote_list = DBUtil.root.vote.list.db
 
         let count = await DBUtil.get(db_vote, "count")
-        console.log("D", D)
-        console.log("count.value", count.value)
         count.value++
 
         D.ID = count.value
+        // D.date = (new Date()).setTime((new Date()).getTime() + 8*60*60).toISOString()
+        D.date = (new Date()).toISOString().substr(0,10)
+
+        
+        console.log("D", D)
+        console.log("count.value", count.value)
 
         await db_vote_list.put(count.value, JSON.stringify(D))
         await db_vote.put("count", JSON.stringify(count))
-
-
-        let ddd = await DBUtil.get(db_vote_list, 1)
-        console.log("ddd", ddd)
-
-        await db_vote.close()
-        await db_vote_list.close()
     },
     getVoteList: async function(){
-        let db_vote = level('./LEVELDB/vote')
-        let db_vote_list = level('./LEVELDB/vote/list')
+        let db_vote = DBUtil.root.vote.db
+        let db_vote_list = DBUtil.root.vote.list.db
 
         let count = await DBUtil.get(db_vote, "count")
 
@@ -39,8 +36,6 @@ let vote = {
             voteList.push(one)
         }
 
-        await db_vote.close()
-        await db_vote_list.close()
         console.log(voteList)
 
         return voteList

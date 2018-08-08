@@ -22,7 +22,7 @@ var app = new Vue({
     },
     methods: {
         addVote: function () {
-            var _this = this
+            let _this = this
             _this.busy = true
 
             let D = _this.add
@@ -39,7 +39,7 @@ var app = new Vue({
             });
         },
         getVoteList: function () {
-            var _this = this
+            let _this = this
             _this.busy = true
 
             let D = {}

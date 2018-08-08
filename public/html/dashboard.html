@@ -35,15 +35,17 @@
                 type="button"
                 data-toggle="modal" 
                 data-target="#MODAL-ADD-VOTE"
-                class="btn btn-outline-dark btn-lg rounded-circle round-btn"
-                ><ion-icon name="add"></ion-icon></button>
+                class="btn btn-outline-dark btn-lg rounded-circle round-btn-100"
+                ><ion-icon name="add" size="large"></ion-icon></button>
             </div>
         </div>
         <div class="row">
             <div v-for="(v, i) in voteList" class="col-md-4 text-center" >
                 <button 
                 type="button"
-                class="btn btn-outline-dark btn-lg rounded-circle round-btn"
+                data-toggle="tooltip"
+                title="something here"
+                class="btn btn-outline-dark btn-lg rounded-circle round-btn-200"
                 ><ion-icon name="play"></ion-icon> {{v.title}}</button>
             </div>
         </div>
@@ -134,4 +136,5 @@
 </body>
 <!-- Vue setup should be at the end. -->
 <script src="dashboard.js"></script>
+<script src="execute.js"></script>
 </html>

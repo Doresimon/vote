@@ -30,6 +30,7 @@ function checkDir(Dir){
 async function checkDb(path, des){
     return (new Promise((resolve, reject) => {
         let db = level(path)
+        console.log("[CHECK]", path)
         db.close(async function(err){
             for (const key in des) {
                 await checkDir(path+"/"+key)
@@ -40,8 +41,6 @@ async function checkDb(path, des){
 
     }))
 }
-
-
 
 /* Main */
 const main = async () => {
@@ -58,14 +57,14 @@ const main = async () => {
 
     db_user.close()
 
-    /* add users */
+    /* add vote info */
     const db_vote = level('./LEVELDB/vote')
 
     await db_vote.put("count",JSON.stringify({value:0}))
 
     db_vote.close()
 
-    console.log("[Done]")
+    console.log("[DONE]")
 }
 
 main()

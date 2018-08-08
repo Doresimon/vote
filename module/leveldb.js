@@ -1,6 +1,30 @@
 var level = require('level')
  
-var db = {
+var ins = {
+    root:{
+        db: level('./LEVELDB'),
+        system:{
+            db: level('./LEVELDB/system'),
+        },
+        user:{
+            db: level('./LEVELDB/user'),
+        },
+        vote:{
+            db: level('./LEVELDB/vote'),
+            list:{
+                db: level('./LEVELDB/vote/list'),
+            },
+            detail:{
+                db: level('./LEVELDB/vote/detail'),
+            },
+            participant:{
+                db: level('./LEVELDB/vote/participant'),
+            },
+            executer:{
+                db: level('./LEVELDB/vote/executer'),
+            },
+        },
+    },
     save: function(name, data){
         var db = level('./db/'+name)
         db.put(data.date, data, function (err) {
@@ -27,4 +51,4 @@ var db = {
     }
 }
 
-module.exports = db
+module.exports = ins

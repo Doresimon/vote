@@ -11,7 +11,11 @@ a {
   margin-top: 5px;
 }
 
-.round-btn{
+.round-btn-100{
   width: 100px;
   height: 100px;
+}
+.round-btn-200{
+  width: 200px;
+  height: 200px;
 }
