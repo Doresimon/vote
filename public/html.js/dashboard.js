@@ -17,6 +17,7 @@ var app = new Vue({
                 participant: 1,
                 target: 1,
             },
+            participant:[],
         },
         voteList:[],
     },
@@ -24,18 +25,20 @@ var app = new Vue({
         addVote: function () {
             let _this = this
             _this.busy = true
-
+            let ele = "#MODAL-ADD-VOTE"
             let D = _this.add
  
             axios.post('/api/vote/addVote', D)
             .then(function (response) { // handle success
                 console.log(response.data);
+                _this.closeModal(ele)
             })
             .catch(function (error) {   // handle error
                 console.log(error);
             })
             .then(function () {         // always executed
                 _this.busy = false
+                _this.getVoteList()
             });
         },
         getVoteList: function () {
@@ -55,6 +58,16 @@ var app = new Vue({
             .then(function () {         // always executed
                 _this.busy = false
             });
+        },
+        jump: function (ID) {
+            // func.jump("voteManage.html?voteID="+ID)
+            func.jumpNew("voteManage.html?voteID="+ID)
+        },
+        callModal: function (ele) {
+            $(ele).modal("show")
+        },
+        closeModal: function (ele) {
+            $(ele).modal("hide")
         },
     },
     created: function () {

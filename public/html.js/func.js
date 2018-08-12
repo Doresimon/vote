@@ -2,6 +2,9 @@ const func = {
     jump: function(target){
         location.href = target
     },
+    jumpNew: function(target){
+        window.open(target)
+    },
     getParam: function(name) {
         let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
         let r = location.search.substr(1).match(reg);

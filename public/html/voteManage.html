@@ -24,38 +24,67 @@
 <body>
     <div class="container-fluid" id="app">
         <div class="row">
-            <div class="col-md-12 text-center" >
-                <h1>{{vote.title}}</h1>
+            <div class="col-md-4" >
+                <h1>详情</h1>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12 text-center" >
-                <button 
-                type="button"
-                data-toggle="modal" 
-                data-target="#MODAL-ADD-PARTICIPANT"
-                class="btn btn-outline-dark btn-lg rounded-circle round-btn-100"
-                ><ion-icon name="add" size="large"></ion-icon></button>
+            <div class="col-md-4" >
+                <div class="row">
+                    <span class="col-md-4" ><h2>名称:</h2></span>
+                    <span class="col-md-8" ><h2>{{vote.title}}</h2></span>
+                </div>
+                <div class="row">
+                    <span class="col-md-4" >创建时间:</span>
+                    <span class="col-md-8" >{{vote.date}}</span>
+                </div>
+                <div class="row">
+                    <span class="col-md-4" >计票人数:</span>
+                    <span class="col-md-8" >{{vote.num.executer}}</span>
+                </div>
+                <div class="row">
+                    <span class="col-md-4" >目标/候选:</span>
+                    <span class="col-md-8" >{{vote.num.target}} / {{vote.num.participant}}</span>
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div v-for="(v, i) in voteList" class="col-md-4 text-center" >
+            <div class="col-md-2" >
                 <button 
+                @click="callModal('#MODAL-ADD-PARTICIPANT')"
+                :disabled="vote.participant.length>0"
                 type="button"
                 data-toggle="tooltip"
-                title="something here"
+                title="一次性导入所有参选人"
                 class="btn btn-outline-dark btn-lg rounded-circle round-btn-200"
-                ><ion-icon name="play"></ion-icon> {{v.title}}</button>
+                ><ion-icon name="add"></ion-icon> 录入参选人</button>
+            </div>
+            <div class="col-md-2" >
+                <button 
+                @click="jump(vote.ID)"
+                type="button"
+                data-toggle="tooltip"
+                title="当前投票的所有状态"
+                class="btn btn-outline-success btn-lg rounded-circle round-btn-200"
+                ><ion-icon name="pulse"></ion-icon> 进度</button>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12" >
+            <div class="col-md-12 text-center" >
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12" ><h3>参选人 {{vote.participant.length}}</h3></div>
+            <div class="col-md-2" v-for="(v, i) in vote.participant">
+                <span>{{v}}</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12" ><h3>计票人 {{vote.executer.length}}</h3></div>
+            <div class="col-md-2" v-for="(v, i) in vote.executer">
+                <span>{{v}}</span>
             </div>
         </div>
 
         <!-- Modal -->
         <div class="modal fade" id="MODAL-ADD-PARTICIPANT" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document" >
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Add Participant</h5>
@@ -68,9 +97,16 @@
                 <div class="row">
                     <div class="col-md-12">
                         <textarea 
+                        @change="parse()"
                         v-model="add.participantStr"
-                        cols="30" rows="10"
+                        rows="10"
+                        class="form-control"
                         ></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2" v-for="(v, i) in add.participant">
+                        <span>{{v}}</span>
                     </div>
                 </div>
             </div>
@@ -78,8 +114,8 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button 
-                @click="parse()"
-                :disabled="add.participantStr==''||busy"
+                @click="addParticipant()"
+                :disabled="add.participantStr=='' || busy || add.participant.length==0 || add.participant.length != vote.num.participant"
                 type="button" 
                 class="btn btn-primary"
                 >Add</button>
@@ -90,8 +126,10 @@
 
     </div>
 </body>
-<!-- Vue setup should be at the end. -->
+<!-- functons -->
 <script src="func.js"></script>
+<!-- Vue setup should be at the end. -->
 <script src="voteManage.js"></script>
+<!-- init -->
 <script src="execute.js"></script>
 </html>

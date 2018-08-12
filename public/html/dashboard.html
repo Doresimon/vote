@@ -25,26 +25,29 @@
 <body>
     <div class="container-fluid" id="app">
         <div class="row">
-            <div class="col-md-12 text-center" >
-                <h1>Dashboard</h1>
+            <div class="col-md-12 text-center alert alert-primary" >
+                <h1 class="font-size-100px">控制面板</h1>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12 text-center" >
+            <div class="col-md-12 text-center alert alert-success " >
                 <button 
+                @click="callModal('#MODAL-ADD-VOTE')"
+                data-toggle="tooltip"
+                title="新增选举"
                 type="button"
-                data-toggle="modal" 
-                data-target="#MODAL-ADD-VOTE"
                 class="btn btn-outline-dark btn-lg rounded-circle round-btn-100"
                 ><ion-icon name="add" size="large"></ion-icon></button>
             </div>
         </div>
         <div class="row">
+            <div class="col-md-12 text-center" ></div>
+        </div>
+        <div class="row alert alert-dark">
             <div v-for="(v, i) in voteList" class="col-md-4 text-center" >
                 <button 
+                @click="jump(v.ID)"
                 type="button"
                 data-toggle="tooltip"
-                title="something here"
+                :title="'参选人数='+v.num.participant+'.目标人数='+v.num.executer"
                 class="btn btn-outline-dark btn-lg rounded-circle round-btn-200"
                 ><ion-icon name="play"></ion-icon> {{v.title}}</button>
             </div>
@@ -56,7 +59,7 @@
 
         <!-- Modal -->
         <div class="modal fade" id="MODAL-ADD-VOTE" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Add Vote</h5>
@@ -134,7 +137,10 @@
 
     </div>
 </body>
+<!-- functons -->
+<script src="func.js"></script>
 <!-- Vue setup should be at the end. -->
 <script src="dashboard.js"></script>
+<!-- init -->
 <script src="execute.js"></script>
 </html>

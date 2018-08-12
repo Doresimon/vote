@@ -51,9 +51,9 @@ const main = async () => {
     /* add users */
     const db_user = level('./LEVELDB/user')
 
-    await db_user.put("boss",JSON.stringify({role:"admin", pass:"1024"}))
-    await db_user.put("halo",JSON.stringify({role:"executer", pass:"0000"}))
-    await db_user.put("hedy",JSON.stringify({role:"executer", pass:"9999"}))
+    await db_user.put("boss",JSON.stringify({name:"boss",role:"admin", pass:"1024"}))
+    await db_user.put("halo",JSON.stringify({name:"halo",role:"executer", pass:"0000"}))
+    await db_user.put("hedy",JSON.stringify({name:"hedy",role:"executer", pass:"9999"}))
 
     db_user.close()
 

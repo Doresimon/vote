@@ -25,13 +25,6 @@ var ins = {
             },
         },
     },
-    save: function(name, data){
-        var db = level('./db/'+name)
-        db.put(data.date, data, function (err) {
-            db.close()
-            if (err) return console.log('Ooops!', err) // some kind of I/O error
-        })
-    },
     get: function(db, key){
         var p = new Promise((resolve, reject) => {
             db.get(key, function (err, value) {
@@ -42,9 +35,21 @@ var ins = {
                     }
                     // I/O or other error, pass it up the callback chain
                     resolve(null)
-                    return callback(err)
+                    return err
                 }
                 resolve(JSON.parse(value))
+            })
+        })
+        return p
+    },
+    put: function(db, key, value){
+        var p = new Promise((resolve, reject) => {
+            db.put(key, JSON.stringify(value), function (err) {
+                if (err) {
+                    resolve(false)
+                    return err
+                }
+                resolve(true)
             })
         })
         return p
