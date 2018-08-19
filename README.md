@@ -35,3 +35,11 @@ run server
 ## repo statistics
 
 [openhub](https://www.openhub.net/p/Doresimon-vote)
+
+## git setting
+
+> git remote -v
+
+> git remote remove origin
+
+> git remote add origin  git@github.com:Doresimon/vote.git

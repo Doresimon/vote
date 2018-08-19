@@ -52,11 +52,13 @@
             <div class="col-md-12" ><h3>候选人: {{vote.participant.length}}人</h3></div>
             <div class="col-md-2" v-for="(v, i) in vote.participant">
                 <span>
+                    {{i+1}} 
                     {{v}} 
                     <span class="badge badge-secondary"> {{ticketSum[i]}}</span>
                 </span>
             </div>
         </div>
+        <!-- div -->
         <div class="row">
             <div class="col-md-12" ><h3>票子: {{ticketList.length}}张</h3></div>
             <div class="col-md-12">
@@ -91,6 +93,7 @@
             </div>
             </div>
         </div>
+        <!-- table -->
 
         <!-- Modal -->
         <div class="modal fade" id="MODAL-ADD-TICKET" tabindex="-1" role="dialog">
