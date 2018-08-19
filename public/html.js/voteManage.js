@@ -14,6 +14,7 @@ var app = new Vue({
             },
             participant:[],
             executer:[],
+            pass:{},
         },
         user:{
             name:"",

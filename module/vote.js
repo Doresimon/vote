@@ -67,8 +67,18 @@ let vote = {
     },
     getVoteInfo: async function(D){
         let db_vote_list = DBUtil.root.vote.list.db
+        let db_user = DBUtil.root.user.db
         let ID = parseInt(D.ID)
         let one = await DBUtil.get(db_vote_list, ID)
+
+        one.pass = {}
+
+        for (const key in one.executer) {
+            const e = one.executer[key];
+            let u = await DBUtil.get(db_user, e)
+            one.pass[e] = u.pass
+        }
+
         return one
     },
     addParticipant: async function(D){

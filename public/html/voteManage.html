@@ -79,6 +79,8 @@
             <div class="col-md-12" ><h3>计票人 {{vote.executer.length}}</h3></div>
             <div class="col-md-2" v-for="(v, i) in vote.executer">
                 <span>{{v}}</span>
+                <span>::</span>
+                <span>{{vote.pass[v]}}</span>
             </div>
         </div>
 
