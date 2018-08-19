@@ -6,7 +6,7 @@ a working log
 
 1. Export to excel
 2. use table for tickets list
-3. `参选人` -> `候选人`
+3. ~~`参选人` -> `候选人`~~
 4. `计票人` show __password__
 5. `候选人` 按照票数排序
 6. 表头显示`全名`

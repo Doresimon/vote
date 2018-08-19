@@ -51,9 +51,9 @@
                 :disabled="vote.participant.length>0"
                 type="button"
                 data-toggle="tooltip"
-                title="一次性导入所有参选人"
+                title="一次性导入所有候选人"
                 class="btn btn-outline-dark btn-lg rounded-circle round-btn-200"
-                ><ion-icon name="add"></ion-icon> 录入参选人</button>
+                ><ion-icon name="add"></ion-icon> 录入候选人</button>
             </div>
             <div class="col-md-2" >
                 <button 
@@ -70,7 +70,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12" ><h3>参选人 {{vote.participant.length}}</h3></div>
+            <div class="col-md-12" ><h3>候选人 {{vote.participant.length}}</h3></div>
             <div class="col-md-2" v-for="(v, i) in vote.participant">
                 <span>{{v}}</span>
             </div>

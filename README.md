@@ -16,6 +16,10 @@ set up leveldb directory and files.
 
 > node .\util\leveldb.init.js
 
+run server
+
+> nohup npm start > output.log &
+
 
 ## icons
 
