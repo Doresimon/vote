@@ -8,10 +8,13 @@
     <!-- Bootstrap -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/bootstrap-v4.0.0.min.css">
+    <!-- <link rel="stylesheet" href="css/vue-good-table.min.css"> -->
     <!-- VUE.js -->
     <script src="js/vue-v2.5.16.js"></script>
     <!-- vue-tables-2.js -->
-    <script src="js/vue-tables-2.min.js"></script>
+    <!-- <script src="js/vue-tables-2.min.js"></script> -->
+    <!-- vue-tables-2.js -->
+    <!-- <script src="js/vue-good-table.min.js"></script> -->
     <!-- axios -->
     <script src="js/axios-v0.18.0.min.js"></script>
     <!-- jquery, bootstrap -->
@@ -20,6 +23,12 @@
     <script src="js/bootstrap-v4.0.0.min.js"></script>
     <!-- icons -->
     <script src="https://unpkg.com/ionicons@4.2.2/dist/ionicons.js"></script>
+
+    <!-- Element UI -->
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
 </head>
 <body>
     <div class="container-fluid" id="app">
@@ -49,17 +58,30 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12" ><h3>候选人: {{vote.participant.length}}人</h3></div>
-            <div class="col-md-2" v-for="(v, i) in vote.participant">
-                <span>
-                    {{i+1}} 
-                    {{v}} 
-                    <span class="badge badge-secondary"> {{ticketSum[i]}}</span>
+            <div class="col-md-12" >
+                <h3>
+                    候选人: {{vote.participant.length}}人 
+                    <button 
+                    @click="sortTicketSum()"
+                    type="button"
+                    data-toggle="tooltip"
+                    title="切换顺序"
+                    class="btn btn-link "
+                    ><ion-icon name="arrow-dropdown-circle" size="large"></ion-icon></button>
+                </h3>
+            </div>
+            <div class="col-md-2" v-for="(v, i) in ticketSum">
+                <span class="row">
+                    <span class="col-md-2">{{v.ID+1}} </span>
+                    <span class="col-md-10">
+                        {{v.participant}} 
+                        <span class="badge badge-secondary"> {{v.cnt}}</span>
+                    </span>
                 </span>
             </div>
         </div>
         <!-- div -->
-        <div class="row">
+        <!-- <div class="row">
             <div class="col-md-12" ><h3>票子: {{ticketList.length}}张</h3></div>
             <div class="col-md-12">
             <div class="row">
@@ -92,8 +114,77 @@
                 </span>
             </div>
             </div>
-        </div>
+        </div> -->
         <!-- table -->
+        <!-- <div class="row">
+            <div class="col-md-12" ><h3>票子: {{ticketList.length}}张</h3></div>
+            <div class="col-md-12" >
+                <v-client-table :data="table.data" :columns="table.columns" :options="table.options">
+                    <span slot="percent" slot-scope="props">{{props.row.total}} / {{vote.num.participant}}</span>
+                    <span slot="status" slot-scope="props">
+                        <span v-if="props.row.total > vote.num.target" style="color:rgb(110, 0, 0)"><ion-icon name="close"></ion-icon> 无效</span>
+                        <span v-else-if="props.row.total == 0" style="color:rgb(110, 110, 110)"><ion-icon name="trash"></ion-icon> 弃权</span>
+                        <span v-else style="color:rgb(0, 110, 0)"><ion-icon name="checkmark"></ion-icon> 有效</span>
+                    </span>
+                    <span slot="participant" slot-scope="props">
+                        <span v-for="(w, j) in props.row.value">
+                            <span v-if="w==1"><ion-icon name="square"></ion-icon></span>
+                            <span v-else><ion-icon name="square-outline"></ion-icon></span>
+                        </span>
+                    </span>
+                </v-client-table>
+            </div>
+        </div> -->
+        <!-- element ui table -->
+        <div class="row">
+            <div class="col-md-12" >
+                <h3>票子: 总计{{ticketList.length}}张</h3>
+            </div>
+            <div class="col-md-12" >
+                <el-table
+                :data="table.data"
+                height="800"
+                stripe 
+                border
+                :default-sort = "{prop: 'ID', order: 'descending'}"
+                style="width: 100%">
+                    <el-table-column prop="ID" label="ID" sortable>
+                    </el-table-column>
+                    <el-table-column prop="executer" label="计票人"
+                    :filters="table.filter.executer"
+                    :filter-method="filterHandler"
+                    >
+                    </el-table-column>
+                    <el-table-column prop="percent" label="投票 / 参选">
+                        <template slot-scope="scope">
+                            {{scope.row.total}} / {{vote.num.participant}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="status" label="状态"
+                    :filters="table.filter.status"
+                    :filter-method="filterHandler_status"
+                    >
+                        <template slot-scope="scope">
+                            <span v-if="scope.row.total > vote.num.target" style="color:rgb(110, 0, 0)"><ion-icon name="close"></ion-icon> 无效</span>
+                            <span v-else-if="scope.row.total == 0" style="color:rgb(110, 110, 110)"><ion-icon name="trash"></ion-icon> 弃权</span>
+                            <span v-else style="color:rgb(0, 110, 0)"><ion-icon name="checkmark"></ion-icon> 有效</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="participant" label="详情"
+                        width="600">
+                        <template slot-scope="scope">
+                            <span v-for="(w, j) in scope.row.value"
+                            data-toggle="tooltip"
+                            :title="vote.participant[j]"
+                            >
+                                <span v-if="w==1"><ion-icon name="square"></ion-icon></span>
+                                <span v-else><ion-icon name="square-outline"></ion-icon></span>
+                            </span>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </div>
+        </div>
 
         <!-- Modal -->
         <div class="modal fade" id="MODAL-ADD-TICKET" tabindex="-1" role="dialog">

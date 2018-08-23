@@ -5,10 +5,10 @@ a working log
 ## 2018 08 09
 
 1. Export to excel
-2. use table for tickets list
+2. ~~use table for tickets list~~
 3. ~~`参选人` -> `候选人`~~
 4. ~~`计票人` show __password__~~
-5. `候选人` 按照票数排序
+5. ~~`候选人` 按照票数排序~~
 6. 表头显示`全名`
 7. ~~候选人添加`序号`~~
 8. 全部汉化
