@@ -182,10 +182,27 @@ var app = new Vue({
             return p
         },
         toggleTicket (i) {
+            switch (this.add.value[i]) {
+                case -1:
+                    v = 1
+                    d = 1
+                    break;
+                case 0:
+                    v = -1
+                    d = 0
+                    break;
+                case 1:
+                    v = 0
+                    d = -1
+                    break;
+            
+                default:
+                    break;
+            }
+            
             // Vue.set
-            let v = this.add.value[i]==1 ? 0:1
             Vue.set(this.add.value, i, v)
-            this.add.total += (v-0.5)*2
+            this.add.total += d
             console.log(this.add.value[i])
         },
         setAllTicket (v) {
@@ -194,7 +211,7 @@ var app = new Vue({
             }
             this.add.total = 0
             for (let i = 0; i < this.add.value.length; i++) {
-                this.add.total += this.add.value[i]
+                this.add.total += Math.floor( (this.add.value[i]+1)/2 )
             }
             console.log(this.add.value)
         },
@@ -204,7 +221,7 @@ var app = new Vue({
                 let cnt = 0
                 for (let j = 0; j < this.ticketList.length; j++) {
                     if (this.ticketList[j].total>0 && this.ticketList[j].total<=this.vote.num.target) {
-                        cnt += this.ticketList[j].value[i]
+                        cnt +=  Math.floor( (this.ticketList[j].value[i]+1)/2 )
                     }
                 }
                 // sum[i] = cnt
@@ -295,9 +312,8 @@ var app = new Vue({
             this.calTicketSum()
         },
         toggleRefresh(){
-            this.refreshInfo()
-
             if (this.tictok == null) {
+                this.refreshInfo()
                 this.tictok = setInterval("app.refreshInfo()",10000)
                 console.log("ON")
             } else {
@@ -306,10 +322,6 @@ var app = new Vue({
                 console.log("OFF")
             }
         },
-        // refreshOFF(){
-        //     this.tictok = window.clearInterval(this.tictok)
-        //     this.tictok = null
-        // },
     },
     created: async function () {
         this.vote.ID = func.getParam("voteID")
