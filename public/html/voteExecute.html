@@ -35,8 +35,8 @@
 <body>
     <div class="container-fluid" id="app">
         <div class="row">
-            <div class="col-md-4" >
-                <h1>计票</h1>
+            <div class="col-md-2" >
+                <h1 class="display-1">计票</h1>
             </div>
             <div class="col-md-4" >
                 <h2>名称: {{vote.title}}</h2>
@@ -44,14 +44,23 @@
                 <p>计票人数: {{vote.num.executer}}</p>
                 <p>目标/候选: {{vote.num.target}} / {{vote.num.participant}}</p>
             </div>
-            <div class="col-md-4" >
+            <div class="col-md-2">
                 <button 
                 @click="callModal('#MODAL-ADD-TICKET')"
                 type="button"
                 data-toggle="tooltip"
                 title="添加一张选票"
-                class="btn btn-outline-dark btn-lg rounded-circle round-btn-100"
+                class="btn btn-outline-dark btn-lg rounded-circle round-btn-150"
                 ><ion-icon name="add" size="large"></ion-icon></button>
+            </div>
+            <div class="col-md-4">
+                <button 
+                @click="toggleRefresh()"
+                type="button"
+                data-toggle="tooltip"
+                title="开启/关闭自动刷新"
+                class="btn btn-outline-dark btn-lg rounded-circle round-btn-150"
+                ><ion-icon name="sync" size="large"></ion-icon></button>
             </div>
         </div>
         <div class="row">
@@ -213,7 +222,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document" style="max-width:80%">
         <div class="modal-content" >
             <div class="modal-header">
-                <h5 class="modal-title">Add Participant {{add.total}} / {{vote.num.participant}}</h5>
+                <h5 class="modal-title">新增选票 {{add.total}} / {{vote.num.participant}}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>
@@ -221,14 +230,20 @@
             <div class="modal-body">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
+                        赞成 / 反对 / 总数 = {{add.total}} / {{add.object}} / {{vote.num.participant}}
+                    </div>
+                    <div class="col-md-4">
+                        状态: {{add.status}}
+                    </div>
+                    <div class="col-md-2">
                         <button 
                         @click="setAllTicket(1)"
                         type="button" 
                         class="btn btn-success btn-lg btn-block"
                         >全选</button>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-2">
                         <button 
                         @click="setAllTicket(0)"
                         type="button" 

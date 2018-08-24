@@ -59,7 +59,7 @@ var app = new Vue({
         ticketList:[],
         order:true,
         busy: false,
-        dida: null,
+        tictok: null,
     },
     methods: {
         callModal (ele) {
@@ -290,19 +290,37 @@ var app = new Vue({
             return v === value;
         },
         async refreshInfo(){
+            console.log("refreshInfo()")
             await this.getTicketList()
             this.calTicketSum()
         },
+        toggleRefresh(){
+            this.refreshInfo()
+
+            if (this.tictok == null) {
+                this.tictok = setInterval("app.refreshInfo()",10000)
+                console.log("ON")
+            } else {
+                window.clearInterval(this.tictok)
+                this.tictok = null
+                console.log("OFF")
+            }
+        },
+        // refreshOFF(){
+        //     this.tictok = window.clearInterval(this.tictok)
+        //     this.tictok = null
+        // },
     },
     created: async function () {
         this.vote.ID = func.getParam("voteID")
+        this.user.name = func.getCookie('name')
+
         await this.getVoteInfo()
         await this.getTicketList()
         this.setAllTicket(1)
         this.calTicketSum()
-        this.user.name = func.getCookie('name')
         if (this.user.name == "boss") {
-            this.dida = setInterval("app.refreshInfo()",10000) //auto refresh
+            this.tictok = setInterval("app.refreshInfo()",10000) //auto refresh
         }
     }
   })
