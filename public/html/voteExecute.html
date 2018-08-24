@@ -6,7 +6,6 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Vote Execute</title>
     <!-- Bootstrap -->
-    <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/bootstrap-v4.0.0.min.css">
     <!-- <link rel="stylesheet" href="css/vue-good-table.min.css"> -->
     <!-- VUE.js -->
@@ -29,6 +28,9 @@
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <!-- 引入组件库 -->
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+    
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <div class="container-fluid" id="app">
@@ -62,7 +64,7 @@
                 <h3>
                     候选人: {{vote.participant.length}}人 
                     <button 
-                    @click="sortTicketSum()"
+                    @click="toggleSortTicketSum()"
                     type="button"
                     data-toggle="tooltip"
                     title="切换顺序"
@@ -70,14 +72,35 @@
                     ><ion-icon name="arrow-dropdown-circle" size="large"></ion-icon></button>
                 </h3>
             </div>
-            <div class="col-md-2" v-for="(v, i) in ticketSum">
-                <span class="row">
-                    <span class="col-md-2">{{v.ID+1}} </span>
-                    <span class="col-md-10">
-                        {{v.participant}} 
-                        <span class="badge badge-secondary"> {{v.cnt}}</span>
+            <div class="col-md-2 margin-bottom-5" v-for="(v, i) in ticketSum">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <button type="button" 
+                        :class="['btn', { 'btn-success': v.status==1, 'btn-warning': v.status==0, 'btn-dark': v.status==-1 }]"
+                        >
+                            {{("0" + (v.ID + 1)).substr(-2)}}
+                        </button>
+                    </div>
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-outline-dark text-left" style="width:150px;">
+                            {{v.participant}} 
+                            <span class="badge badge-secondary"> {{v.cnt}}</span>
+                        </button>
+                    </div>
+                </div>
+<!-- 
+                <button 
+                type="button"
+                class="btn btn-outline-dark btn-lg"
+                >
+                    <span class="row">
+                        <span class="col-md-1">{{v.ID + 1}} </span>
+                        <span class="col-md-10">
+                            {{v.participant}} 
+                            <span class="badge badge-secondary"> {{v.cnt}}</span>
+                        </span>
                     </span>
-                </span>
+                </button>                 -->
             </div>
         </div>
         <!-- div -->
@@ -143,7 +166,6 @@
             <div class="col-md-12" >
                 <el-table
                 :data="table.data"
-                height="800"
                 stripe 
                 border
                 :default-sort = "{prop: 'ID', order: 'descending'}"
@@ -171,7 +193,7 @@
                         </template>
                     </el-table-column>
                     <el-table-column prop="participant" label="详情"
-                        width="600">
+                        width="1080">
                         <template slot-scope="scope">
                             <span v-for="(w, j) in scope.row.value"
                             data-toggle="tooltip"
@@ -188,8 +210,8 @@
 
         <!-- Modal -->
         <div class="modal fade" id="MODAL-ADD-TICKET" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document" >
-        <div class="modal-content">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document" style="max-width:80%">
+        <div class="modal-content" >
             <div class="modal-header">
                 <h5 class="modal-title">Add Participant {{add.total}} / {{vote.num.participant}}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -215,14 +237,18 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3 margin-bottom-5" v-for="(v, i) in add.value" :key="i">
+                    <div class="col-md-1 margin-bottom-5" v-for="(v, i) in add.value" :key="i">
                         <button 
                         @click="toggleTicket(i)"
                         type="button" 
                         class="btn btn-outline-dark btn-lg btn-block"
                         >
-                            <span class="float-left">{{vote.participant[i]}}</span>
-                            <span v-show="v==1" class="float-right"><ion-icon name="checkmark"></ion-icon></span>
+                            <!-- <span>{{("0" + (i + 1)).substr(-2)}} </span>
+                            <span class="text-justify">{{vote.participant[i]}}</span>
+                            <span v-show="v==1" class="float-right"><ion-icon name="checkmark"></ion-icon></span> -->
+                            <p>{{("0" + (i + 1)).substr(-2)}} </p>
+                            <p>{{vote.participant[i]}}</p>
+                            <p><span v-show="v==1"><ion-icon name="checkmark"></ion-icon></span></p>
                         </button>
                     </div>
                     

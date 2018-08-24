@@ -24,9 +24,9 @@ router.post('/auth', async function(req, res, next) {
   if (user!={} && user.pass==pass) {
     let c = crypto.randomBytes(256).toString('hex')
     req.session.cred = c;
-    res.cookie('cred', c, { maxAge: 1*hour });
+    res.cookie('cred', c, { maxAge: 24*hour });
     req.session.name = name;
-    res.cookie('name', name, { maxAge: 1*hour });
+    res.cookie('name', name, { maxAge: 24*hour });
 
     if (user.role=="executer") {
       data.url = "voteExecute.html?voteID="+user.vote

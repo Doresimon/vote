@@ -59,15 +59,17 @@ var app = new Vue({
         ticketList:[],
         order:true,
         busy: false,
+        dida: null,
     },
     methods: {
-        callModal: function (ele) {
+        callModal (ele) {
+            this.setAllTicket(1)
             $(ele).modal("show")
         },
-        closeModal: function (ele) {
+        closeModal (ele) {
             $(ele).modal("hide")
         },
-        getVoteInfo: function () {
+        getVoteInfo () {
             let _this = this
             _this.busy = true
 
@@ -102,16 +104,15 @@ var app = new Vue({
             })
             return p
         },
-        addTicket: function () {
+        addTicket () {
             let _this = this
-            _this.busy = true
             let ele = "#MODAL-ADD-TICKET"
-
             let D = {
                 ID: _this.vote.ID,
                 add: _this.add,
             }
             console.log(D)
+            _this.busy = true
 
             axios.post('/api/vote/addTicket', D)
             .then(function (response) { // handle success
@@ -129,7 +130,6 @@ var app = new Vue({
                     total: _this.add.total,
                     value: v,
                 }
-                // Vue.set(_this.ticketList, _this.ticketList.length + 1, tmp)
                 _this.ticketList.push(tmp)
                 _this.table.data.push(tmp)
 
@@ -144,14 +144,13 @@ var app = new Vue({
             });
 
         },
-        getTicketList: function () {
+        getTicketList () {
             let _this = this
-            _this.busy = true
-
             let D = {
                 ID:_this.vote.ID
             }
- 
+            _this.busy = true
+
             let p = new Promise(function (resolve, reject){
 
             axios.post('/api/vote/getTicketList', D)
@@ -182,14 +181,14 @@ var app = new Vue({
             })
             return p
         },
-        toggleTicket: function (i) {
+        toggleTicket (i) {
             // Vue.set
             let v = this.add.value[i]==1 ? 0:1
             Vue.set(this.add.value, i, v)
             this.add.total += (v-0.5)*2
             console.log(this.add.value[i])
         },
-        setAllTicket: function (v) {
+        setAllTicket (v) {
             for (let i = 0; i < this.vote.participant.length; i++) {
                 Vue.set(this.add.value, i, v)
             }
@@ -199,7 +198,7 @@ var app = new Vue({
             }
             console.log(this.add.value)
         },
-        calTicketSum: function (v) {
+        calTicketSum () {
             let sum = []
             for (let i = 0; i < this.vote.participant.length; i++) {
                 let cnt = 0
@@ -213,29 +212,57 @@ var app = new Vue({
                     ID: i,
                     participant: this.vote.participant[i],
                     cnt: cnt,
+                    order: -1,
+                    status: -1,
                 }
             }
+            sum.sort(this.desc_cnt)
+            for (const i in sum) {
+                sum[i].order = i
+            }
+            let end = sum[this.vote.num.target-1]
+            let endnext = sum[this.vote.num.target]
+            let d = end.cnt == endnext.cnt ? 0 : 1
+            let c = 0
+            for (const i in sum) {
+                if (sum[i].cnt > end.cnt) {     //当选
+                    sum[i].status = 1
+                }
+                if (sum[i].cnt == end.cnt) {    //平票
+                    sum[i].status = d
+                    // c += (i >= this.vote.num.target-1) ? 1 : 0
+                }
+            }
+            // if (c > 0) {
+            //     end.status = 1
+            // }
+
+            sum.sort(this.asc_ID)
             this.ticketSum = sum
+            this.sortTicketSum()
+        },
+        toggleSortTicketSum() {
+            this.order = !this.order
+            this.sortTicketSum()
         },
         sortTicketSum() {
-            let asc_ID = function (x, y) {
+            this.ticketSum.sort(this.order ? this.asc_ID:this.desc_cnt)
+        },
+        asc_ID (x, y) {
+            if (x.ID < y.ID) { return -1;
+            } else if (x.ID > y.ID) { return 1;
+            } else { return 0;
+            }
+        },
+        desc_cnt (x, y) {
+            if (x.cnt < y.cnt) { return 1;
+            } else if (x.cnt > y.cnt) { return -1;
+            } else { 
                 if (x.ID < y.ID) { return -1;
                 } else if (x.ID > y.ID) { return 1;
                 } else { return 0;
                 }
             }
-            let desc_cnt = function (x, y) {
-                if (x.cnt < y.cnt) { return 1;
-                } else if (x.cnt > y.cnt) { return -1;
-                } else { 
-                    if (x.ID < y.ID) { return -1;
-                    } else if (x.ID > y.ID) { return 1;
-                    } else { return 0;
-                    }
-                }
-            }
-            this.ticketSum.sort(this.order ? desc_cnt:asc_ID)
-            this.order = !this.order
         },
         setFilter () {
             var _this = this
@@ -262,6 +289,10 @@ var app = new Vue({
             if (row.total == 0) { v = 2 } // 弃权
             return v === value;
         },
+        async refreshInfo(){
+            await this.getTicketList()
+            this.calTicketSum()
+        },
     },
     created: async function () {
         this.vote.ID = func.getParam("voteID")
@@ -269,5 +300,9 @@ var app = new Vue({
         await this.getTicketList()
         this.setAllTicket(1)
         this.calTicketSum()
+        this.user.name = func.getCookie('name')
+        if (this.user.name == "boss") {
+            this.dida = setInterval("app.refreshInfo()",10000) //auto refresh
+        }
     }
   })

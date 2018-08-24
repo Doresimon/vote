@@ -19,9 +19,18 @@ a {
   width: 200px;
   height: 200px;
 }
+.color-btn-blue{
+  background-color: rgb(51, 133, 255)
+}
+.color-btn-orange{
+  background-color: rgb(255, 202, 28)
+}
 
 .margin-bottom-5{
   margin-bottom: 5px;
+}
+.padding-1{
+  padding: 1px;
 }
 
 .font-size-100px{
