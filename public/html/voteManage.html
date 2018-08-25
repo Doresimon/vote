@@ -20,30 +20,23 @@
     <script src="js/bootstrap-v4.0.0.min.js"></script>
     <!-- icons -->
     <script src="https://unpkg.com/ionicons@4.2.2/dist/ionicons.js"></script>
+    <!-- Element UI -->
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
 </head>
 <body>
     <div class="container-fluid" id="app">
         <div class="row">
-            <div class="col-md-4" >
-                <h1>详情</h1>
+            <div class="col-md-2" >
+                <h1 class="display-1">详情</h1>
             </div>
             <div class="col-md-4" >
-                <div class="row">
-                    <span class="col-md-4" ><h2>名称:</h2></span>
-                    <span class="col-md-8" ><h2>{{vote.title}}</h2></span>
-                </div>
-                <div class="row">
-                    <span class="col-md-4" >创建时间:</span>
-                    <span class="col-md-8" >{{vote.date}}</span>
-                </div>
-                <div class="row">
-                    <span class="col-md-4" >计票人数:</span>
-                    <span class="col-md-8" >{{vote.num.executer}}</span>
-                </div>
-                <div class="row">
-                    <span class="col-md-4" >目标/候选:</span>
-                    <span class="col-md-8" >{{vote.num.target}} / {{vote.num.participant}}</span>
-                </div>
+                <h2>名称: {{vote.title}}</h2>
+                <p>创建时间: {{vote.date}}</p>
+                <p>计票人数: {{vote.num.executer}}</p>
+                <p>目标/候选: {{vote.num.target}} / {{vote.num.participant}}</p>
             </div>
             <div class="col-md-2" >
                 <button 
@@ -52,8 +45,8 @@
                 type="button"
                 data-toggle="tooltip"
                 title="一次性导入所有候选人"
-                class="btn btn-outline-dark btn-lg rounded-circle round-btn-200"
-                ><ion-icon name="add"></ion-icon> 录入候选人</button>
+                class="btn btn-outline-dark btn-lg rounded-circle round-btn-150"
+                ><ion-icon name="add"></ion-icon> 候选人</button>
             </div>
             <div class="col-md-2" >
                 <button 
@@ -61,7 +54,7 @@
                 type="button"
                 data-toggle="tooltip"
                 title="当前投票的所有状态"
-                class="btn btn-outline-success btn-lg rounded-circle round-btn-200"
+                class="btn btn-outline-success btn-lg rounded-circle round-btn-150"
                 ><ion-icon name="pulse"></ion-icon> 进度</button>
             </div>
         </div>
@@ -70,18 +63,27 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12" ><h3>候选人 {{vote.participant.length}}</h3></div>
+            <div class="col-md-12" ><h3>候选人 {{vote.participant.length}} 人 </h3></div>
             <div class="col-md-2" v-for="(v, i) in vote.participant">
-                <span>{{i+1}}</span>
+                <span>{{("0" + (i + 1)).substr(-2)}}</span>
                 <span>{{v}}</span>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12" ><h3>计票人 {{vote.executer.length}}</h3></div>
+            <div class="col-md-12" >
+                <h3>
+                    计票人 {{vote.executer.length}} 人 <账号>::<密码> 
+                    <el-switch
+                    v-model="showPass"
+                    active-color="#13ce66"
+                    inactive-color="#ff4949">
+                    </el-switch>
+                </h3>
+            </div>
             <div class="col-md-2" v-for="(v, i) in vote.executer">
                 <span>{{v}}</span>
                 <span>::</span>
-                <span>{{vote.pass[v]}}</span>
+                <span v-show="showPass">{{vote.pass[v]}}</span>
             </div>
         </div>
 
@@ -90,7 +92,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document" >
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Add Participant</h5>
+                <h5 class="modal-title">添加候选人</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>

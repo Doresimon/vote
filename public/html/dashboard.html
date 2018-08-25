@@ -24,11 +24,21 @@
 </head>
 <body>
     <div class="container-fluid" id="app">
-        <div class="row">
-            <div class="col-md-12 text-center alert alert-primary" >
-                <h1 class="font-size-100px">控制面板</h1>
+        <div class="row alert bgThinRed">
+            <div class="col-md-3 text-center" >
+                <span 
+                style="height:50px;font-size:50px;">
+                    <img 
+                    src="img/dh.icon.png" 
+                    class="img-fluid"
+                    style="margin-bottom:5px;"
+                    >
+                    控制面板
+                </span>
             </div>
-            <div class="col-md-12 text-center alert alert-success " >
+            <div class="col-md-3"></div>
+            <div class="col-md-3"></div>
+            <div class="col-md-3 text-center" >
                 <button 
                 @click="callModal('#MODAL-ADD-VOTE')"
                 data-toggle="tooltip"
@@ -42,7 +52,7 @@
             <div class="col-md-12 text-center" ></div>
         </div>
         <div class="row alert alert-dark">
-            <div v-for="(v, i) in voteList" class="col-md-4 text-center" >
+            <div v-for="(v, i) in voteList" class="col-md-3 text-center" style="margin-bottom:10px;">
                 <button 
                 @click="jump(v.ID)"
                 type="button"

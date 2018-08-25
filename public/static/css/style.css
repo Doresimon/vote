@@ -1,10 +1,24 @@
 body {
   padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  /* font: 16px "Lucida Grande", Helvetica, Arial, sans-serif; */
+  /* font: 16px "STKaiti"; */
+  /* font: 16px "LiSu"; */
+  /* font: 16px "STLiti"; */
 }
 
 a {
   color: #00B7FF;
+}
+
+.fontRed{
+  color: #b50d0d
+}
+.bgRed{
+  background-color: #b50d0d
+}
+.bgThinRed{
+  /* background-color: #ffeacb; */
+  background-color: rgba(225, 50, 15, 0.5);
 }
 
 .font-size-x2{
@@ -26,10 +40,28 @@ a {
   width: 200px;
   height: 200px;
 }
-.color-btn-blue{
+.span-dot{
+  height: 16px;
+  width: 14px;
+  margin-right: 1px;
+  margin-left: 1px;
+}
+.background-color-blue{
   background-color: rgb(51, 133, 255)
 }
-.color-btn-orange{
+.background-color-black{
+  background-color: rgb(0, 0, 0)
+}
+.background-color-white{
+  background-color: rgb(255, 255, 255)
+}
+.background-color-red{
+  background-color: rgb(199, 0, 0)
+}
+.border-1px{
+  border:1px;
+}
+.background-color-orange{
   background-color: rgb(255, 202, 28)
 }
 .color-success{

@@ -110,17 +110,17 @@ let vote = {
         }
 
         let db_vote_detail_list = DBUtil.root.vote.detail[vote.ID].db
-        let total = 0
-        for (let i = 0; i < D.add.value.length; i++) {
-            total += D.add.value[i]
-        }
+        // let total = 0
+        // for (let i = 0; i < D.add.value.length; i++) {
+        //     total += D.add.value[i]
+        // }
 
         let T = {
             ID: vote.ticketCount,
             voteID: vote.ID,
             executer: name,
             value: D.add.value,
-            total: total,
+            total: D.add.total,
         }
 
         vote.ticket.push({

@@ -25,6 +25,7 @@ var app = new Vue({
             participant:[],
         },
         voteList:[],
+        showPass:false,
     },
     methods: {
         callModal: function (ele) {
