@@ -48,6 +48,7 @@ var app = new Vue({
         },
         user:{
             name:"",
+            role:"",
         },
         add: {
             ID:-1,
@@ -59,7 +60,20 @@ var app = new Vue({
         ticketList:[],
         order:true,
         busy: false,
-        tictok: null,
+        sw:{
+            show:{
+                btn:{
+                    addTicket: true,
+                    refresh: true,
+                    print: true,
+                }
+            },
+            auto:{
+                refresh:{
+                    tictok: null,
+                }
+            }
+        },
     },
     methods: {
         callModal (ele) {
@@ -91,6 +105,12 @@ var app = new Vue({
                 _this.table.options.headings['participant'] = str
                 
                 _this.setFilter()
+
+                _this.$notify({
+                    title: '选票信息',
+                    message: '参选人 ' + _this.vote.participant.length + ' 人',
+                    type: 'info'
+                  });
                 
                 resolve(true)
             })
@@ -135,6 +155,12 @@ var app = new Vue({
 
                 _this.calTicketSum()
                 _this.closeModal(ele)
+
+                _this.$notify({
+                    title: '新增选票成功',
+                    message: '赞成 ' + total + '人',
+                    type: 'success'
+                  });
             })
             .catch(function (error) {   // handle error
                 console.log(error);
@@ -168,6 +194,12 @@ var app = new Vue({
 
                     _this.table.data.push(tmp)
                 });
+
+                _this.$notify({
+                    title: '选票统计',
+                    message: '当前共计 ' + _this.ticketList.length + ' 张选票',
+                    type: 'info'
+                  });
 
                 resolve(true)
             })
@@ -240,7 +272,7 @@ var app = new Vue({
             let end = sum[this.vote.num.target-1]
             let endnext = sum[this.vote.num.target]
             let d = end.cnt == endnext.cnt ? 0 : 1
-            let c = 0
+            // let c = 0
             for (const i in sum) {
                 if (sum[i].cnt > end.cnt) {     //当选
                     sum[i].status = 1
@@ -298,7 +330,7 @@ var app = new Vue({
             return row[property] === value;
         },
         filterHandler_status(value, row) {
-            let d = row.total - this.vote.num.target
+            // let d = row.total - this.vote.num.target
             let v = 0
             if (row.total > 0 && row.total <= this.vote.num.target) 
             { v = 0 } //有效
@@ -312,27 +344,40 @@ var app = new Vue({
             this.calTicketSum()
         },
         toggleRefresh(){
-            if (this.tictok == null) {
+            if (this.sw.auto.refresh.tictok == null) {
+            // if (this.tictok == null) {
                 this.refreshInfo()
-                this.tictok = setInterval("app.refreshInfo()",10000)
+                this.sw.auto.refresh.tictok = setInterval("app.refreshInfo()",10000)
+                // this.tictok = setInterval("app.refreshInfo()",10000)
                 console.log("ON")
             } else {
-                window.clearInterval(this.tictok)
-                this.tictok = null
+                window.clearInterval(this.sw.auto.refresh.tictok)
+                this.sw.auto.refresh.tictok = null
+                // window.clearInterval(this.tictok)
+                // this.tictok = null
                 console.log("OFF")
             }
         },
     },
     created: async function () {
-        this.vote.ID = func.getParam("voteID")
-        this.user.name = func.getCookie('name')
+        this.vote.ID    =   func.getParam("voteID")
+        this.user.name  =   func.getCookie('name')
+        this.user.role  =   func.getCookie('role')
 
         await this.getVoteInfo()
         await this.getTicketList()
         this.setAllTicket(1)
         this.calTicketSum()
-        if (this.user.name == "boss") {
-            this.tictok = setInterval("app.refreshInfo()",10000) //auto refresh
+        if (this.user.role == "admin") {
+            this.sw.show.btn.addTicket  =   true
+            this.sw.show.btn.refresh    =   true
+            this.sw.show.btn.print      =   true
+            this.sw.auto.refresh.tictok =   setInterval("app.refreshInfo()",10000)
+        }else{
+            this.sw.show.btn.addTicket  =   true
+            this.sw.show.btn.refresh    =   false
+            this.sw.show.btn.print      =   false
+            this.sw.auto.refresh.tictok =   null
         }
     }
   })

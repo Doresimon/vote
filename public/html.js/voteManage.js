@@ -95,6 +95,7 @@ var app = new Vue({
             });
         },
         jump: function (ID) {
+            // func.jumpNew("voteWatch.html?voteID="+ID)
             func.jumpNew("voteExecute.html?voteID="+ID)
         },
     },

@@ -72,7 +72,7 @@
         <div class="row">
             <div class="col-md-12" >
                 <h3>
-                    计票人 {{vote.executer.length}} 人 <账号>::<密码> 
+                    计票人 {{vote.executer.length}} 人 <账号> <密码> 
                     <el-switch
                     v-model="showPass"
                     active-color="#13ce66"
@@ -81,9 +81,8 @@
                 </h3>
             </div>
             <div class="col-md-2" v-for="(v, i) in vote.executer">
-                <span>{{v}}</span>
-                <span>::</span>
-                <span v-show="showPass">{{vote.pass[v]}}</span>
+                <el-tag type="success">{{v}}</el-tag>
+                <el-tag v-show="showPass" type="info">{{vote.pass[v]}}</el-tag>
             </div>
         </div>
 
@@ -123,7 +122,7 @@
                 :disabled="add.participantStr=='' || busy || add.participant.length==0 || add.participant.length != vote.num.participant"
                 type="button" 
                 class="btn btn-primary"
-                >Add</button>
+                >添加</button>
             </div>
         </div>
         </div>
