@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vote Watch</title>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="css/bootstrap-v4.0.0.min.css">
+    <!-- VUE.js -->
+    <script src="js/vue-v2.5.16.js"></script>
+    <!-- axios -->
+    <script src="js/axios-v0.18.0.min.js"></script>
+    <!-- jquery, bootstrap -->
+    <script src="js/jquery-v3.2.1.slim.min.js"></script>
+    <script src="js/popper-v1.12.9.min.js"></script>
+    <script src="js/bootstrap-v4.0.0.min.js"></script>
+
+    <!-- Element UI -->
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+    
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container-fluid" id="app">
+        <div class="row">
+            <div class="col-md-2" >
+                <h1 class="display-1">监票</h1>
+            </div>
+            <div class="col-md-4" >
+                <h2>名称: {{vote.title}}</h2>
+                <p>创建时间: {{vote.date}}</p>
+                <p>计票人数: {{vote.num.executer}}</p>
+                <p>目标/候选: {{vote.num.target}} / {{vote.num.participant}}</p>
+            </div>
+            <div class="col-md-2">
+                <button 
+                @click="callModal('#MODAL-ADD-TICKET')"
+                type="button"
+                data-toggle="tooltip"
+                title="添加一张选票"
+                class="btn btn-outline-dark btn-lg rounded-circle round-btn-150"
+                v-show="false"
+                >
+                    <i class="el-icon-plus font-size-x2"></i>
+                </button>
+                
+            </div>
+            <div class="col-md-2">
+                <button 
+                @click="toggleRefresh()"
+                type="button"
+                data-toggle="tooltip"
+                title="开启/关闭自动刷新"
+                class="btn btn-outline-dark btn-lg rounded-circle round-btn-150"
+                >
+                <i class="el-icon-loading font-size-x2" v-show="tictok!=null"></i>
+                <i class="el-icon-refresh font-size-x2" v-show="tictok==null"></i>
+                </button>
+            </div>
+            <div class="col-md-2">
+                <button 
+                @click="exportResult()"
+                type="button"
+                data-toggle="tooltip"
+                title="打印结果"
+                class="btn btn-outline-dark btn-lg rounded-circle round-btn-150"
+                >
+                <i class="el-icon-printer font-size-x2"></i>
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-center" >
+                
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12" >
+                <h3>
+                    候选人: {{vote.participant.length}} 人 
+                    <button 
+                    @click="toggleSortTicketSum()"
+                    type="button"
+                    data-toggle="tooltip"
+                    title="切换顺序"
+                    class="btn btn-link "
+                    >
+                    <i class="el-icon-sort font-size-x2"></i>
+                    </button>
+                </h3>
+            </div>
+            <div class="col-md-2 margin-bottom-5" v-for="(v, i) in ticketSum">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <button type="button" 
+                        :class="['btn', { 'btn-success': v.status==1, 'btn-warning': v.status==0, 'btn-dark': v.status==-1 }]"
+                        >
+                            {{("0" + (v.ID + 1)).substr(-2)}}
+                        </button>
+                    </div>
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-outline-dark text-left" style="width:150px;" >
+                            <span class="float-left">{{v.participant}}</span>
+                            <span class="float-right badge badge-pill badge-dark">{{v.cnt}} 票</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- element ui table -->
+        <div class="row">
+            <div class="col-md-12" >
+                <h3>选票: 总计{{ticketList.length}}张</h3>
+            </div>
+            <div class="col-md-12" >
+                <el-table
+                :data="table.data"
+                stripe 
+                border
+                :default-sort = "{prop: 'ID', order: 'descending'}"
+                style="width: 100%">
+                    <el-table-column prop="ID" label="ID" sortable>
+                    </el-table-column>
+                    <el-table-column prop="executer" label="计票人"
+                    :filters="table.filter.executer"
+                    :filter-method="filterHandler"
+                    >
+                    </el-table-column>
+                    <el-table-column prop="percent" label="投票 / 参选">
+                        <template slot-scope="scope">
+                            {{scope.row.total}} / {{vote.num.participant}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="status" label="状态"
+                    :filters="table.filter.status"
+                    :filter-method="filterHandler_status"
+                    >
+                        <template slot-scope="scope">
+                            <span v-if="scope.row.total > vote.num.target" style="color:rgb(110, 0, 0)"><i class="el-icon-close"></i> 无效</span>
+                            <span v-else-if="scope.row.total == 0" style="color:rgb(110, 110, 110)"><i class="el-icon-delete"></i> 弃权</span>
+                            <span v-else style="color:rgb(0, 110, 0)"><i class="el-icon-check"></i> 有效</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="participant" label="详情"
+                        width="1080">
+                        <template slot-scope="scope">
+                            <span v-for="(w, j) in scope.row.value"
+                            data-toggle="tooltip"
+                            :title="('0' + (j + 1)).substr(-2) + ' ' + vote.participant[j]"
+                            >
+                                <span v-if="w==1"><i class="el-icon-star-on"></i></span>
+                                <span v-else-if="w==-1" style="color:rgb(223, 0, 0)"><i class="el-icon-star-on"></i></span>
+                                <span v-else><i class="el-icon-star-off"></i></span>
+                                <!-- <span v-if="w==1"><ion-icon name="square"></ion-icon></span>
+                                <span v-else-if="w==-1" style="color:rgb(223, 0, 0)"><ion-icon name="square"></ion-icon></span>
+                                <span v-else><ion-icon name="square-outline"></ion-icon></span> -->
+                            </span>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="MODAL-ADD-TICKET" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document" style="max-width:80%">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <h4 class="modal-title">新增选票</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            <div class="container-fluid">
+                <div class="row margin-bottom-5">
+                     <div class="col-md-6">
+                        <el-progress 
+                        :text-inside="true" 
+                        :stroke-width="40" 
+                        :percentage="(add.total/vote.num.participant*100).toFixed(0)" 
+                        :status="add.total>vote.num.target ? 'exception':'success'"
+                        ></el-progress>
+                    </div>
+                    <div class="col-md-1">
+                        <button 
+                        type="button" 
+                        class="btn btn-secondary btn-lg btn-block"
+                        disabled
+                        >{{add.total}} / {{vote.num.participant}}</button>
+                    </div>
+                    <div class="col-md-1" 
+                    v-show="add.total<=vote.num.target && add.total>0">
+                        <button 
+                        type="button" 
+                        class="btn btn-success btn-lg btn-block"
+                        disabled
+                        ><span>有效</span></button>
+                    </div>
+                    <div class="col-md-1"
+                    v-show="add.total>vote.num.target">
+                        <button 
+                        type="button" 
+                        class="btn btn-danger btn-lg btn-block"
+                        disabled
+                        ><span>无效</span></button>
+                    </div>
+                    <div class="col-md-1"
+                    v-show="add.total==0">
+                        <button 
+                        type="button" 
+                        class="btn btn-secondary btn-lg btn-block"
+                        disabled
+                        ><span>弃权</span></button>
+                    </div>
+                    <!-- <div class="col-md-4 alert alert-dark">
+                        赞成 / 反对 / 总数 = {{add.total}} / {{add.object}} / {{vote.num.participant}}
+                    </div>
+                    <div class="col-md-4  alert alert-dark">
+                        状态: {{add.status}}
+                    </div> -->
+                    <div class="col-md-2">
+                        <button 
+                        @click="setAllTicket(1)"
+                        type="button" 
+                        class="btn btn-success btn-lg btn-block"
+                        >全选 <i class="el-icon-circle-check-outline"></i></button>
+                        <!-- <el-button
+                        @click="setAllTicket(1)" 
+                        type="success" 
+                        icon="el-icon-success"
+                        >全选</el-button> -->
+                    </div>
+                    <div class="col-md-2">
+                        <button 
+                        @click="setAllTicket(0)"
+                        type="button" 
+                        class="btn btn-secondary btn-lg btn-block"
+                        >全空 <i class="el-icon-remove-outline"></i></button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1 margin-bottom-5" v-for="(v, i) in add.value" :key="i">
+                        <button 
+                        @click="toggleTicket(i)"
+                        type="button" 
+                        :class="['btn','btn-lg','btn-block',{ 'btn-outline-secondary': v==0, 'btn-outline-success': v==1,'btn-outline-danger': v==-1, }]"
+                        >
+                            <div>{{("0" + (i + 1)).substr(-2)}} </div>
+                            <div>{{vote.participant[i]}}</div>
+                            <div>
+                                <span v-show="v==1" ><i class="el-icon-success font-size-x2"></i></span>
+                                <span v-show="v==0" ><i class="el-icon-minus font-size-x2"></i></span>
+                                <span v-show="v==-1" ><i class="el-icon-error font-size-x2"></i></span>
+                                <!-- el-icon-success -->
+                            </div>
+                        </button>
+                    </div>
+                    
+                </div>
+            </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                <button 
+                @click="addTicket()"
+                :disabled="busy"
+                type="button" 
+                class="btn btn-primary"
+                >添加</button>
+            </div>
+        </div>
+        </div>
+        </div>
+
+    </div>
+</body>
+<!-- functons -->
+<script src="func.js"></script>
+<!-- Vue setup should be at the end. -->
+<script src="voteExecute.js"></script>
+<!-- init -->
+<script src="execute.js"></script>
+</html>
