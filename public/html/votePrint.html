@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vote Result Print</title>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="css/bootstrap-v4.0.0.min.css">
+    <!-- VUE.js -->
+    <script src="js/vue-v2.5.16.js"></script>
+    <!-- axios -->
+    <script src="js/axios-v0.18.0.min.js"></script>
+    <!-- jquery, bootstrap -->
+    <script src="js/jquery-v3.2.1.slim.min.js"></script>
+    <script src="js/popper-v1.12.9.min.js"></script>
+    <script src="js/bootstrap-v4.0.0.min.js"></script>
+
+    <!-- Element UI -->
+    <!-- 引入样式 -->
+    <!-- <link rel="stylesheet" href="css/elementUI/index.css"> -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+    
+    <!-- <link rel="stylesheet" href="css/style.css"> -->
+
+    <style lang="stylesheet">
+        body {
+            margin-top: 50px;
+            font-size:24px;
+            font-family: "Kaiti";
+        }
+        /* table {
+            border-color: rgb(0, 0, 0);
+            
+        } */
+        table,table tr th, table tr td { 
+            border:1px solid #000000;
+            font-size:20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="app">
+
+        <div class="row">
+            <div class="col-md-12 text-center" >
+                <h1>中国共产党复旦大学第十四届委员会委员</h1>
+                <h1>计票结果报告单</h1>
+            </div>
+            <div class="col-md-12" >
+                <p>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    中国共产党复旦大学第十四次代表大会应到代表291名，
+                    实到代表（&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;）名，
+                    发出选票（&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;）张，
+                    其中无效票（&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;）张，
+                    有效票（&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;）张。
+                </p>
+                <p> 
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    计票结果如下（按得票多少为序）：
+                </p>
+            </div>
+        </div>
+
+        <el-row type="flex" justify="center" style="margin-top:10px;">
+            <el-col :span="12">
+                <table style="width:90%;" cellpadding="5">
+                    <thead>
+                        <tr>
+                            <th>排序</th>
+                            <th>候选人</th>
+                            <th>得赞成票数</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(v, i) in table.printData.left">
+                            <td> {{v.ID}} </td>
+                            <td> {{v.participant}} </td>
+                            <td> {{v.cnt}} </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </el-col>
+            <el-col :span="12">
+                <table style="width:90%;" cellpadding="5">
+                    <thead>
+                        <tr>
+                            <th>排序</th>
+                            <th>候选人</th>
+                            <th>得赞成票数</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(v, i) in table.printData.right">
+                            <td> {{v.ID}} </td>
+                            <td> {{v.participant}} </td>
+                            <td> {{v.cnt}} </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </el-col>
+        </el-row>
+
+
+        <el-row type="flex" justify="center" style="margin-top:20px;">
+            <el-col :span="12">
+                <table style="width:90%;" cellpadding="5">
+                    <thead>
+                        <tr>
+                            <th>另选人姓名</th>
+                            <th>得赞成票数</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(v, i) in table.printOtherData.left">
+                            <td> {{v.name}} </td>
+                            <td> {{v.cnt}} </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </el-col>
+            <el-col :span="12">
+                <table style="width:90%;" cellpadding="5">
+                    <thead>
+                        <tr>
+                            <th>另选人姓名</th>
+                            <th>得赞成票数</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(v, i) in table.printOtherData.right">
+                            <td> {{v.name}} </td>
+                            <td> {{v.cnt}} </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </el-col>
+        </el-row>
+
+        <div class="row" style="margin-top:20px;">
+            <div class="col-md-6" >
+                <strong>总监票人: </strong>
+            </div>
+            <div class="col-md-6" >
+                <strong>总计票人: </strong>
+            </div>
+        </div>
+
+    </div>
+</body>
+<!-- functons -->
+<script src="func.js"></script>
+<!-- Vue setup should be at the end. -->
+<script src="votePrint.js"></script>
+<!-- init -->
+<script src="execute.js"></script>
+</html>
