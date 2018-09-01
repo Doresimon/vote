@@ -25,129 +25,353 @@
 
     
     <!-- <link rel="stylesheet" href="css/style.css"> -->
-
     <style lang="stylesheet">
+        
         body {
             margin-top: 50px;
             font-size:24px;
             font-family: "Kaiti";
         }
-        /* table {
-            border-color: rgb(0, 0, 0);
-            
-        } */
+
         table,table tr th, table tr td { 
             border:1px solid #000000;
             font-size:20px;
         }
+
+        .A4{
+            height: 1500px; 
+        }
+        
+        .margin-bottom-10{
+            margin-bottom: 10px;
+        }
+
+        .margin-bottom-20{
+            margin-bottom: 20px;
+        }
+        .print-show {
+            display: none;
+        }
+
+        @media print {
+            .print-hide {
+                display: none;
+            }
+            .print-show {
+                display: inline;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="container" id="app">
+    <div class="container A4" id="app">
 
-        <div class="row">
-            <div class="col-md-12 text-center" >
-                <h1>中国共产党复旦大学第十四届委员会委员</h1>
-                <h1>计票结果报告单</h1>
+        <!-- function -->
+        <div class="row print-hide margin-bottom-10">
+            <div class="col-md-6 text-center margin-bottom-10" >
+                <select 
+                @change="changeType()"
+                v-model="print.type"
+                :disabled="user.role!='admin'"
+                class="form-control">
+                    <option value="result">计票结果单</option>
+                    <option value="report">计票结果报告单</option>
+                </select>
             </div>
-            <div class="col-md-12" >
-                <p>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    中国共产党复旦大学第十四次代表大会应到代表291名，
-                    实到代表（&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;）名，
-                    发出选票（&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;）张，
-                    其中无效票（&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;）张，
-                    有效票（&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;）张。
-                </p>
-                <p> 
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    计票结果如下（按得票多少为序）：
-                </p>
+            <div class="col-md-6 text-center margin-bottom-10" >
+                <select 
+                @change="setExecuter(print.selectValue)"
+                v-model="print.selectValue"
+                :disabled="print.type=='report'"
+                class="form-control">
+                    <option value="admin">总计</option>
+                    <option 
+                    v-for="(v, i) in vote.executer"
+                    :value="v"
+                    >第{{i+1}}组 {{v}} </option>
+                </select>
+            </div>
+            <div class="col-md-12 text-center margin-bottom-10" >
+                <button
+                @click="callPrint()"
+                class="btn btn-block btn-outline-dark"
+                >打印 (Ctrl + P)</button>
             </div>
         </div>
 
-        <el-row type="flex" justify="center" style="margin-top:10px;">
-            <el-col :span="12">
-                <table style="width:90%;" cellpadding="5">
-                    <thead>
-                        <tr>
-                            <th>排序</th>
-                            <th>候选人</th>
-                            <th>得赞成票数</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(v, i) in table.printData.left">
-                            <td> {{v.ID}} </td>
-                            <td> {{v.participant}} </td>
-                            <td> {{v.cnt}} </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </el-col>
-            <el-col :span="12">
-                <table style="width:90%;" cellpadding="5">
-                    <thead>
-                        <tr>
-                            <th>排序</th>
-                            <th>候选人</th>
-                            <th>得赞成票数</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(v, i) in table.printData.right">
-                            <td> {{v.ID}} </td>
-                            <td> {{v.participant}} </td>
-                            <td> {{v.cnt}} </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </el-col>
-        </el-row>
+        <!-- result -->
+        <div class="row" v-if="print.type=='result'">
+        <div class="col-md-12">
 
+            <div class="row margin-bottom-20">
+                <div class="col-md-12 text-center" >
+                    <h1>{{vote.title}}</h1>
+                    <h1>
+                        <span v-show="print.selectValue!='admin'">小组</span><span v-show="print.selectValue=='admin'">总</span>计票结果单
+                    </h1>
+                </div>
 
-        <el-row type="flex" justify="center" style="margin-top:20px;">
-            <el-col :span="12">
-                <table style="width:90%;" cellpadding="5">
-                    <thead>
-                        <tr>
-                            <th>另选人姓名</th>
-                            <th>得赞成票数</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(v, i) in table.printOtherData.left">
-                            <td> {{v.name}} </td>
-                            <td> {{v.cnt}} </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </el-col>
-            <el-col :span="12">
-                <table style="width:90%;" cellpadding="5">
-                    <thead>
-                        <tr>
-                            <th>另选人姓名</th>
-                            <th>得赞成票数</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(v, i) in table.printOtherData.right">
-                            <td> {{v.name}} </td>
-                            <td> {{v.cnt}} </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </el-col>
-        </el-row>
-
-        <div class="row" style="margin-top:20px;">
-            <div class="col-md-6" >
-                <strong>总监票人: </strong>
+                <div class="col-md-12" v-show="print.selectValue!='admin'">
+                    <p> 
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        本小组统计
+                        选票（&nbsp;&nbsp;{{ticketStat.total}}&nbsp;&nbsp;）张，
+                        其中无效票（&nbsp;&nbsp;{{ticketStat.invalid}}&nbsp;&nbsp;）张，
+                        有效票（&nbsp;&nbsp;{{ticketStat.valid}}&nbsp;&nbsp;）张。
+                    </p>
+                    <p> 
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        计票结果如下：
+                    </p>
+                </div>
+                
+                <div class="col-md-12" v-show="print.selectValue=='admin'">
+                    <p>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        中国共产党复旦大学第十四次代表大会应到代表291名，
+                        实到代表（<span class="print-hide"><input 
+                            v-model="ticketStat.here"
+                            type="text" 
+                            style="width:100px;border: 0px;"
+                            placeholder="点击输入"
+                            ></span><span class="print-show">&nbsp;&nbsp;{{ticketStat.here}}&nbsp;&nbsp;</span>）名，
+                        发出选票（&nbsp;&nbsp;{{ticketStat.total}}&nbsp;&nbsp;）张，
+                        其中无效票（&nbsp;&nbsp;{{ticketStat.invalid}}&nbsp;&nbsp;）张，
+                        有效票（&nbsp;&nbsp;{{ticketStat.valid}}&nbsp;&nbsp;）张。
+                    </p>
+                    <p> 
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        计票结果如下（按得票多少为序）：
+                    </p>
+                </div>
             </div>
-            <div class="col-md-6" >
-                <strong>总计票人: </strong>
+
+            <div class="row margin-bottom-20">
+                <div class="col-md-6 text-center" >
+                    <table style="width:100%;" cellpadding="5">
+                        <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>候选人</th>
+                                <th>得赞成票数</th>
+                                <th>不赞成票数</th>
+                                <th>弃权票数</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(v, i) in table.printData.left">
+                                <td> {{v.ID}} </td>
+                                <td> {{v.participant}} </td>
+                                <td> {{v.cnt}} </td>
+                                <td> {{v.cntReject}} </td>
+                                <td> {{v.cntGiveUp}} </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-6 text-center" >
+                    <table style="width:100%;" cellpadding="5">
+                        <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>候选人</th>
+                                <th>得赞成票数</th>
+                                <th>不赞成票数</th>
+                                <th>弃权票数</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(v, i) in table.printData.right">
+                                <td> {{v.ID}} </td>
+                                <td> {{v.participant}} </td>
+                                <td> {{v.cnt}} </td>
+                                <td> {{v.cntReject}} </td>
+                                <td> {{v.cntGiveUp}} </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
+
+            <div class="row margin-bottom-20">
+                <div class="col-md-6 text-center" >
+                    <table style="width:100%;" cellpadding="5">
+                        <thead>
+                            <tr>
+                                <th>另选人姓名</th>
+                                <th>得赞成票数</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(v, i) in table.printOtherData.left">
+                                <td> {{v.name}} </td>
+                                <td> {{v.cnt}} </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-6 text-center" >
+                    <table style="width:100%;" cellpadding="5">
+                        <thead>
+                            <tr>
+                                <th>另选人姓名</th>
+                                <th>得赞成票数</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(v, i) in table.printOtherData.right">
+                                <td> {{v.name}} </td>
+                                <td> {{v.cnt}} </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="row margin-bottom-20" >
+                <div class="col-md-6" >
+                    <strong>
+                        <span v-show="print.selectValue!='admin'">小组</span><span v-show="print.selectValue=='admin'">总</span>监票人: 
+                    </strong>
+                </div>
+                <div class="col-md-6" >
+                    <strong>
+                        <span v-show="print.selectValue!='admin'">小组</span><span v-show="print.selectValue=='admin'">总</span>计票人: 
+                    </strong>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 text-right" >
+                    <strong>{{today}}</strong>
+                </div>
+            </div>
+
+        </div>
+        </div>
+
+
+        <!-- report -->
+        <div class="row" v-if="print.type=='report'">
+        <div class="col-md-12">
+
+            <div class="row margin-bottom-20">
+                <div class="col-md-12 text-center" >
+                    <h1>{{vote.title}}</h1>
+                    <h1>
+                        <span v-show="print.selectValue!='admin'">小组</span><span v-show="print.selectValue=='admin'"></span>计票结果报告单
+                    </h1>
+                </div>
+                <div class="col-md-12" >
+                    <p>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        中国共产党复旦大学第十四次代表大会应到代表291名，
+                        实到代表（<span class="print-hide"><input 
+                            v-model="ticketStat.here"
+                            type="text" 
+                            style="width:100px;border: 0px;"
+                            placeholder="点击输入"
+                            ></span><span class="print-show">&nbsp;&nbsp;{{ticketStat.here}}&nbsp;&nbsp;</span>）名，
+                        发出选票（&nbsp;&nbsp;{{ticketStat.total}}&nbsp;&nbsp;）张，
+                        其中无效票（&nbsp;&nbsp;{{ticketStat.invalid}}&nbsp;&nbsp;）张，
+                        有效票（&nbsp;&nbsp;{{ticketStat.valid}}&nbsp;&nbsp;）张。
+                    </p>
+                    <p> 
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        计票结果如下（按得票多少为序）：
+                    </p>
+                </div>
+            </div>
+
+            <div class="row margin-bottom-20">
+                <div class="col-md-6 text-center" >
+                    <table style="width:100%;" cellpadding="5">
+                        <thead>
+                            <tr>
+                                <th>排序</th>
+                                <th>候选人</th>
+                                <th>得赞成票数</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(v, i) in table.printData.left">
+                                <td> {{v.ID}} </td>
+                                <td> {{v.participant}} </td>
+                                <td> {{v.cnt}} </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-6 text-center" >
+                    <table style="width:100%;" cellpadding="5">
+                        <thead>
+                            <tr>
+                                <th>排序</th>
+                                <th>候选人</th>
+                                <th>得赞成票数</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(v, i) in table.printData.right">
+                                <td> {{v.ID}} </td>
+                                <td> {{v.participant}} </td>
+                                <td> {{v.cnt}} </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="row margin-bottom-20">
+                <div class="col-md-6 text-center" >
+                    <table style="width:100%;" cellpadding="5">
+                        <thead>
+                            <tr>
+                                <th>另选人姓名</th>
+                                <th>得赞成票数</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(v, i) in table.printOtherData.left">
+                                <td> {{v.name}} </td>
+                                <td> {{v.cnt}} </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-6 text-center" >
+                    <table style="width:100%;" cellpadding="5">
+                        <thead>
+                            <tr>
+                                <th>另选人姓名</th>
+                                <th>得赞成票数</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(v, i) in table.printOtherData.right">
+                                <td> {{v.name}} </td>
+                                <td> {{v.cnt}} </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="row margin-bottom-20">
+                <div class="col-md-6" >
+                    <strong>总监票人: </strong>
+                </div>
+                <div class="col-md-6" >
+                    <strong>总计票人: </strong>
+                </div>
+            </div>
+            <div class="row margin-bottom-20">
+                <div class="col-md-12 text-right" >
+                    <strong>{{today}}</strong>
+                </div>
+            </div>
+
+        </div>
         </div>
 
     </div>

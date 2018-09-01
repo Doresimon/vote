@@ -13,10 +13,11 @@ var app = new Vue({
                 right:[],
             },
             printOtherData:{
-                left:[{name:"___", cnt: "___"}],
-                right:[{name:"___", cnt: "___"}],
+                left:[],
+                right:[],
             },
         },
+        other: [],
         vote:{
             ID: 0,
             date:"",
@@ -34,30 +35,23 @@ var app = new Vue({
             name:"",
             role:"",
         },
-        add: {
-            ID:-1,
-            executer:"",
-            total:0,
-            value:[],
+        ticketStat:{
+            here: "",
+            total: 0,
+            valid: 0,
+            invalid: 0,
+        },
+        print:{
+            type: 1,
+            selectValue: '',
+            showSelect: false,
         },
         ticketSum:[],
+        staticTicketList:[],
         ticketList:[],
+        today:"",
         order:true,
         busy: false,
-        sw:{
-            show:{
-                btn:{
-                    addTicket: true,
-                    refresh: true,
-                    print: true,
-                }
-            },
-            auto:{
-                refresh:{
-                    tictok: null,
-                }
-            }
-        },
     },
     methods: {
         getVoteInfo () {
@@ -104,6 +98,7 @@ var app = new Vue({
                 }
 
                 _this.ticketList = response.data.ticketList
+                _this.staticTicketList = response.data.ticketList
 
                 resolve(true)
             })
@@ -117,13 +112,43 @@ var app = new Vue({
             })
             return p
         },
+        calTicketStat () {
+            this.ticketStat.total = this.ticketList.length
+            this.ticketStat.valid = 0
+            this.ticketStat.invalid = 0
+
+            for (let i = 0; i < this.ticketList.length; i++) {
+                if (this.ticketList[i].total>0 && 
+                    this.ticketList[i].total<=this.vote.num.target) {
+                    this.ticketStat.valid++
+                }else{
+                    this.ticketStat.invalid++
+                }
+            }
+        },
         calTicketSum () {
             let sum = []
             for (let i = 0; i < this.vote.participant.length; i++) {
                 let cnt = 0
+                let cntGiveUp = 0
+                let cntReject = 0
                 for (let j = 0; j < this.ticketList.length; j++) {
                     if (this.ticketList[j].total>0 && this.ticketList[j].total<=this.vote.num.target) {
-                        cnt +=  Math.floor( (this.ticketList[j].value[i]+1)/2 )
+                        // cnt +=  Math.floor( (this.ticketList[j].value[i]+1)/2 )
+                        switch (this.ticketList[j].value[i]) {
+                            case 1:
+                                cnt++
+                                break;
+                            case 0:
+                                cntGiveUp++
+                                break;
+                            case -1:
+                                cntReject++
+                                break;
+                        
+                            default:
+                                break;
+                        }
                     }
                 }
                 // sum[i] = cnt
@@ -131,6 +156,8 @@ var app = new Vue({
                     ID: i,
                     participant: this.vote.participant[i],
                     cnt: cnt,
+                    cntGiveUp: cntGiveUp,
+                    cntReject: cntReject,
                     order: -1,
                     status: -1,
                 }
@@ -149,12 +176,8 @@ var app = new Vue({
                 }
                 if (sum[i].cnt == end.cnt) {    //平票
                     sum[i].status = d
-                    // c += (i >= this.vote.num.target-1) ? 1 : 0
                 }
             }
-            // if (c > 0) {
-            //     end.status = 1
-            // }
 
             sum.sort(this.asc_ID)
             this.ticketSum = sum
@@ -167,8 +190,31 @@ var app = new Vue({
         sortTicketSum() {
             this.ticketSum.sort(this.order ? this.asc_ID:this.desc_cnt)
         },
+        setExecuter(executer) {
+            let _this = this
+            _this.ticketList = []
+            if (executer!=undefined) {
+                _this.staticTicketList.forEach(element => {
+                    if (element.executer==executer) {
+                        _this.ticketList.push(element)
+                    }
+                });
+            }else{
+                _this.ticketList = _this.staticTicketList
+            }
+            this.calTicketStat()
+            this.calTicketSum()
+            this.setPrintData()
+            this.setOtherData()
+        },
         setPrintData() {
-            this.ticketSum.sort(this.desc_cnt)
+
+            if (this.print.type==1) {
+                this.ticketSum.sort(this.asc_ID)
+            }else{
+                this.ticketSum.sort(this.desc_cnt)
+            }
+
             this.table.printData.left = []
             this.table.printData.right = []
             let border = this.ticketSum.length/2
@@ -178,6 +224,8 @@ var app = new Vue({
                     ID: i+1,
                     participant: this.vote.participant[e.ID],
                     cnt: e.cnt,
+                    cntGiveUp: e.cntGiveUp,
+                    cntReject: e.cntReject,
                 }
                 if (i < border ) {
                     this.table.printData.left.push(tmp)
@@ -186,6 +234,52 @@ var app = new Vue({
                 }
 
             }
+        },
+        setOtherData() {
+            console.log("setOtherData()")
+
+            let other = {}
+            for (let i = 0; i < this.ticketList.length; i++) {
+                if (this.ticketList[i].total>0 && 
+                    this.ticketList[i].total<=this.vote.num.target && 
+                    this.ticketList[i].other!=undefined) {
+                    for (let j = 0; j < this.ticketList[i].other.length; j++) {
+                        if (other[this.ticketList[i].other[j]]==undefined) {
+                            other[this.ticketList[i].other[j]] = 0
+                        }
+                        other[this.ticketList[i].other[j]]++
+                    }
+                }
+            }
+
+            let sortOther = []
+            for (const key in other) {
+                let tmp = {
+                    name:   key,
+                    cnt:    other[key],
+                }
+                sortOther.push(tmp)
+            }
+            sortOther.sort(this.desc_cnt)
+            let i = 0
+            for (let i = 0; i < sortOther.length; i++) {
+                if (i>=6) {
+                    break
+                }
+                if(i<3){
+                    this.table.printOtherData.left.push(sortOther[i])
+                }else{
+                    this.table.printOtherData.right.push(sortOther[i])
+                }
+            }
+        },
+        changeType () {
+            if (this.type=='report') {
+                print.selectValue = "admin"
+            }
+        },
+        callPrint () {
+            window.print()
         },
         asc_ID (x, y) {
             if (x.ID < y.ID) { return -1;
@@ -205,24 +299,29 @@ var app = new Vue({
         },
     },
     created: async function () {
+        // this.print.type =   func.getParam("type")
+        
+        this.print.type =   "result"
         this.vote.ID    =   func.getParam("voteID")
         this.user.name  =   func.getCookie('name')
         this.user.role  =   func.getCookie('role')
 
+        if (this.user.role == "admin") {
+            this.print.selectValue = "admin"
+        }else{
+            this.print.selectValue = this.user.name
+        }
+
         await this.getVoteInfo()
         await this.getTicketList()
+        this.calTicketStat()
         this.calTicketSum()
         this.setPrintData()
-        // if (this.user.role == "admin") {
-        //     this.sw.show.btn.addTicket  =   true
-        //     this.sw.show.btn.refresh    =   true
-        //     this.sw.show.btn.print      =   true
-        //     this.sw.auto.refresh.tictok =   setInterval("app.refreshInfo()",10000)
-        // }else{
-        //     this.sw.show.btn.addTicket  =   true
-        //     this.sw.show.btn.refresh    =   false
-        //     this.sw.show.btn.print      =   false
-        //     this.sw.auto.refresh.tictok =   null
-        // }
+        this.setOtherData()
+
+
+        let d = new Date()
+        this.today = d.getFullYear() + '年' + d.getMonth() + '月' + d.getDate() + '日'
+        
     }
   })
