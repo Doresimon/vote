@@ -18,7 +18,7 @@ set up leveldb directory and files.
 
 run server
 
-> nohup npm start > output.log &
+> nohup npm start >> ./log/output.log &
 
 
 ## icons

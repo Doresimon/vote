@@ -261,7 +261,8 @@ var app = new Vue({
                 sortOther.push(tmp)
             }
             sortOther.sort(this.desc_cnt)
-            let i = 0
+            this.table.printOtherData.left = []
+            this.table.printOtherData.right = []
             for (let i = 0; i < sortOther.length; i++) {
                 if (i>=6) {
                     break
@@ -274,8 +275,8 @@ var app = new Vue({
             }
         },
         changeType () {
-            if (this.type=='report') {
-                print.selectValue = "admin"
+            if (this.print.type=='report') {
+                this.print.selectValue = "admin"
             }
         },
         callPrint () {
@@ -305,6 +306,8 @@ var app = new Vue({
         this.vote.ID    =   func.getParam("voteID")
         this.user.name  =   func.getCookie('name')
         this.user.role  =   func.getCookie('role')
+
+        console.log("name", this.user.name)
 
         if (this.user.role == "admin") {
             this.print.selectValue = "admin"

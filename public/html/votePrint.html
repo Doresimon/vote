@@ -82,7 +82,7 @@
                 <select 
                 @change="setExecuter(print.selectValue)"
                 v-model="print.selectValue"
-                :disabled="print.type=='report'"
+                :disabled="print.type=='report' || user.role!='admin'"
                 class="form-control">
                     <option value="admin">总计</option>
                     <option 

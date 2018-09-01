@@ -172,7 +172,7 @@ var app = new Vue({
 
                 _this.$notify({
                     title: '新增选票成功',
-                    message: '赞成 ' + total + '人',
+                    message: '赞成 ' + _this.add.total + '人',
                     type: 'success'
                   });
             })
@@ -412,7 +412,7 @@ var app = new Vue({
         }else{
             this.sw.show.btn.addTicket  =   true
             this.sw.show.btn.refresh    =   false
-            this.sw.show.btn.print      =   false
+            this.sw.show.btn.print      =   true
             this.sw.auto.refresh.tictok =   null
         }
     }
