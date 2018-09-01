@@ -55,6 +55,8 @@ var app = new Vue({
             executer:"",
             total:0,
             value:[],
+            other:[],
+            otherName:"",
         },
         ticketSum:[],
         ticketList:[],
@@ -77,6 +79,7 @@ var app = new Vue({
     },
     methods: {
         callModal (ele) {
+            this.add.other = []
             this.setAllTicket(1)
             $(ele).modal("show")
         },
@@ -124,6 +127,12 @@ var app = new Vue({
             })
             return p
         },
+        addOther () {
+            this.add.other.push(this.add.otherName)
+            this.add.total++
+            this.add.otherName = ""
+            return 
+        },
         addTicket () {
             let _this = this
             let ele = "#MODAL-ADD-TICKET"
@@ -144,11 +153,16 @@ var app = new Vue({
                 for (let i = 0; i < _this.add.value.length; i++) {
                     v[i] = _this.add.value[i];
                 }
+                let o = []
+                for (let i = 0; i < _this.add.other.length; i++) {
+                    o[i] = _this.add.other[i];
+                }
                 let tmp = {
                     ID: _this.add.ID,
                     executer: _this.add.executer,
                     total: _this.add.total,
                     value: v,
+                    other: o,
                 }
                 _this.ticketList.push(tmp)
                 _this.table.data.push(tmp)
@@ -192,10 +206,10 @@ var app = new Vue({
                 _this.ticketList.forEach(element => {
                     let tmp = {}
                     tmp.ID = element.ID
-                    tmp.total = element.total
                     tmp.executer = element.executer
-                    // tmp.participant = element.participant
+                    tmp.total = element.total
                     tmp.value = element.value
+                    tmp.other = element.other
 
                     _this.table.data.push(tmp)
                 });
@@ -219,40 +233,40 @@ var app = new Vue({
             return p
         },
         toggleTicket (i) {
-            // switch (this.add.value[i]) {
-            //     case -1:
-            //         v = 1
-            //         d = 1
-            //         break;
-            //     case 0:
-            //         v = -1
-            //         d = 0
-            //         break;
-            //     case 1:
-            //         v = 0
-            //         d = -1
-            //         break;
-            
-            //     default:
-            //         break;
-            // }
             switch (this.add.value[i]) {
                 case -1:
-                    v = 0
-                    d = 0
-                    break;
-                case 0:
                     v = 1
                     d = 1
                     break;
-                case 1:
+                case 0:
                     v = -1
+                    d = 0
+                    break;
+                case 1:
+                    v = 0
                     d = -1
                     break;
             
                 default:
                     break;
             }
+            // switch (this.add.value[i]) {
+            //     case -1:
+            //         v = 0
+            //         d = 0
+            //         break;
+            //     case 0:
+            //         v = 1
+            //         d = 1
+            //         break;
+            //     case 1:
+            //         v = -1
+            //         d = -1
+            //         break;
+            
+            //     default:
+            //         break;
+            // }
             
             // Vue.set
             Vue.set(this.add.value, i, v)
@@ -267,6 +281,7 @@ var app = new Vue({
             for (let i = 0; i < this.add.value.length; i++) {
                 this.add.total += Math.floor( (this.add.value[i]+1)/2 )
             }
+            this.add.total += this.add.other.length
             console.log(this.add.value)
         },
         calTicketSum () {
@@ -367,16 +382,12 @@ var app = new Vue({
         },
         toggleRefresh(){
             if (this.sw.auto.refresh.tictok == null) {
-            // if (this.tictok == null) {
                 this.refreshInfo()
                 this.sw.auto.refresh.tictok = setInterval("app.refreshInfo()",10000)
-                // this.tictok = setInterval("app.refreshInfo()",10000)
                 console.log("ON")
             } else {
                 window.clearInterval(this.sw.auto.refresh.tictok)
                 this.sw.auto.refresh.tictok = null
-                // window.clearInterval(this.tictok)
-                // this.tictok = null
                 console.log("OFF")
             }
         },

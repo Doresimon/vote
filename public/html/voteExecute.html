@@ -156,7 +156,7 @@
                         </template>
                     </el-table-column>
                     <el-table-column prop="participant" label="详情"
-                        width="1080">
+                        :min-width="20*vote.num.participant">
                         <template slot-scope="scope">
                             <span v-for="(w, j) in scope.row.value"
                             data-toggle="tooltip"
@@ -165,9 +165,17 @@
                                 <span v-if="w==1"><i class="el-icon-star-on"></i></span>
                                 <span v-else-if="w==-1" style="color:rgb(223, 0, 0)"><i class="el-icon-star-on"></i></span>
                                 <span v-else><i class="el-icon-star-off"></i></span>
-                                <!-- <span v-if="w==1"><ion-icon name="square"></ion-icon></span>
-                                <span v-else-if="w==-1" style="color:rgb(223, 0, 0)"><ion-icon name="square"></ion-icon></span>
-                                <span v-else><ion-icon name="square-outline"></ion-icon></span> -->
+                            </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="other" label="另选他人"
+                        width="80">
+                        <template slot-scope="scope">
+                            <span v-for="(w, j) in scope.row.other"
+                            data-toggle="tooltip"
+                            :title="w"
+                            >
+                                <span ><i class="el-icon-star-on"></i></span>
                             </span>
                         </template>
                     </el-table-column>
@@ -264,28 +272,77 @@
                                 <span v-show="v==1" ><i class="el-icon-success font-size-x2"></i></span>
                                 <span v-show="v==0" ><i class="el-icon-minus font-size-x2"></i></span>
                                 <span v-show="v==-1" ><i class="el-icon-error font-size-x2"></i></span>
-                                <!-- el-icon-success -->
                             </div>
                         </button>
                     </div>
-                    
+                </div>
+                <!-- other -->
+                <div class="row">
+                    <div class="col-md-1 margin-bottom-5" v-for="(v, i) in add.other" :key="i">
+                        <button 
+                        type="button" 
+                        :class="['btn','btn-lg','btn-block','btn-outline-warning']"
+                        data-toggle="tooltip" 
+                        title="另选他人"
+                        >
+                            <div>00</div>
+                            <div>{{v}}</div>
+                            <div>
+                                <span><i class="el-icon-success font-size-x2"></i></span>
+                            </div>
+                        </button>
+                    </div>
                 </div>
             </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-2">
+                        <input 
+                        v-model="add.otherName"
+                        :disabled="busy || add.other.length>=5"
+                        type="text" 
+                        class="form-control"
+                        placeholder="另选人姓名"
+                        >
+                </div>
+                <div class="col-md-1">
+                    <button 
+                    @click="addOther()"
+                    :disabled="busy || add.otherName==''"
+                    type="button" 
+                    class="btn btn-block btn-warning"
+                    >另选他人</button>
+                </div>
+                <div class="col-md-6"></div>
+                <div class="col-md-1">
+                    <button type="button" class="btn btn-block btn-secondary" data-dismiss="modal">取消</button>
+                </div>
+                <div class="col-md-1">
+                    <button 
+                    @click="addTicket()"
+                    :disabled="busy || add.otherName!=''"
+                    type="button" 
+                    class="btn btn-block btn-primary"
+                    >添加</button>
+                </div>
+                <!-- <input 
+                type="text" 
+                class="form-control"
+                placeholder="另选人姓名"
+                v-model="otherName"
+                >
+
                 <button 
                 @click="addOther()"
                 :disabled="busy"
                 type="button" 
                 class="btn btn-primary"
-                >另选他人</button>
-                <button 
-                @click="addTicket()"
-                :disabled="busy"
-                type="button" 
-                class="btn btn-primary"
-                >添加</button>
+                >另选他人</button> -->
+
+                
+                
             </div>
         </div>
         </div>

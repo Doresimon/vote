@@ -67,7 +67,6 @@ router.post('/vote/:method', async function(req, res, next) {
       R.code = await VoteUtil.addParticipant(D)
       break;
     case "addTicket":
-      console.log(D)
       R.code = await VoteUtil.addTicket(D, username)
       break;
     case "getVoteList":

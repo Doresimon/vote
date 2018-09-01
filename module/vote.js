@@ -26,7 +26,7 @@ let vote = {
                 role: "executer",
                 pass: pass,
             }
-            console.log(one)
+            // console.log(one)
             // insert executer to db::user
             insertStatus[i] = await DBUtil.put(db_user, name, one)
             exec[i] = name
@@ -119,8 +119,9 @@ let vote = {
             ID: vote.ticketCount,
             voteID: vote.ID,
             executer: name,
-            value: D.add.value,
             total: D.add.total,
+            value: D.add.value,
+            other: D.add.other,
         }
 
         vote.ticket.push({
