@@ -182,6 +182,11 @@ var app = new Vue({
             axios.post('/api/vote/getTicketList', D)
             .then(function (response) { // handle success
                 console.log(response.data);
+                if (response.data.ticketList.length == _this.ticketList.length) {
+                    resolve(true)
+                    return
+                }
+
                 _this.ticketList = response.data.ticketList
                 _this.table.data = []
                 _this.ticketList.forEach(element => {
@@ -214,17 +219,34 @@ var app = new Vue({
             return p
         },
         toggleTicket (i) {
+            // switch (this.add.value[i]) {
+            //     case -1:
+            //         v = 1
+            //         d = 1
+            //         break;
+            //     case 0:
+            //         v = -1
+            //         d = 0
+            //         break;
+            //     case 1:
+            //         v = 0
+            //         d = -1
+            //         break;
+            
+            //     default:
+            //         break;
+            // }
             switch (this.add.value[i]) {
                 case -1:
+                    v = 0
+                    d = 0
+                    break;
+                case 0:
                     v = 1
                     d = 1
                     break;
-                case 0:
-                    v = -1
-                    d = 0
-                    break;
                 case 1:
-                    v = 0
+                    v = -1
                     d = -1
                     break;
             
@@ -357,6 +379,9 @@ var app = new Vue({
                 // this.tictok = null
                 console.log("OFF")
             }
+        },
+        jump: function (ID) {
+            func.jumpNew("votePrint.html?voteID="+ID)
         },
     },
     created: async function () {

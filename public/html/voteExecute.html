@@ -71,7 +71,7 @@
             </div>
             <div class="col-md-2">
                 <button 
-                @click="exportResult()"
+                @click="jump(vote.ID)"
                 v-show="sw.show.btn.print"
                 type="button"
                 data-toggle="tooltip"
@@ -203,8 +203,10 @@
                         disabled
                         >{{add.total}} / {{vote.num.participant}}</button>
                     </div>
+                    <!-- <div class="col-md-1" 
+                    v-show="add.total<=vote.num.target && add.total>0"> -->
                     <div class="col-md-1" 
-                    v-show="add.total<=vote.num.target && add.total>0">
+                    v-show="add.total<=vote.num.target ">
                         <button 
                         type="button" 
                         class="btn btn-success btn-lg btn-block"
@@ -219,27 +221,34 @@
                         disabled
                         ><span>无效</span></button>
                     </div>
-                    <div class="col-md-1"
+                    <!-- <div class="col-md-1"
                     v-show="add.total==0">
                         <button 
                         type="button" 
                         class="btn btn-secondary btn-lg btn-block"
                         disabled
                         ><span>弃权</span></button>
-                    </div>
+                    </div> -->
                     <div class="col-md-2">
                         <button 
                         @click="setAllTicket(1)"
                         type="button" 
                         class="btn btn-success btn-lg btn-block"
-                        >全选 <i class="el-icon-circle-check-outline"></i></button>
+                        >全赞成 <i class="el-icon-circle-check-outline"></i></button>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2" v-show="false">
                         <button 
                         @click="setAllTicket(0)"
                         type="button" 
                         class="btn btn-secondary btn-lg btn-block"
                         >全空 <i class="el-icon-remove-outline"></i></button>
+                    </div>
+                    <div class="col-md-2">
+                        <button 
+                        @click="setAllTicket(-1)"
+                        type="button" 
+                        class="btn btn-danger btn-lg btn-block"
+                        >全反对 <i class="el-icon-remove-outline"></i></button>
                     </div>
                 </div>
                 <div class="row">
@@ -265,6 +274,12 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                <button 
+                @click="addOther()"
+                :disabled="busy"
+                type="button" 
+                class="btn btn-primary"
+                >另选他人</button>
                 <button 
                 @click="addTicket()"
                 :disabled="busy"

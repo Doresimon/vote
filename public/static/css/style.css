@@ -5,6 +5,9 @@ body {
   /* font: 16px "LiSu"; */
   /* font: 16px "STLiti"; */
 }
+font-Kaiti {
+  font-family: "STKaiti";
+}
 
 a {
   color: #00B7FF;
@@ -57,6 +60,11 @@ a {
 }
 .background-color-red{
   background-color: rgb(199, 0, 0)
+}
+.padding-1px{
+  padding:1px;
+  max-height:40px;
+  height:40px;
 }
 .border-1px{
   border:1px;

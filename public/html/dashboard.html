@@ -55,19 +55,20 @@
         <div class="row">
             <div class="col-md-12 text-center" ></div>
         </div>
-        <div class="row alert alert-dark">
-            <div v-for="(v, i) in voteList" class="col-md-3 text-center" style="margin-bottom:10px;">
+        <div class="row alert bgThinRed" v-for="(v, i) in voteList" >
+            <div class="col-md-3 text-center" style="margin-bottom:10px;">
                 <button 
                 @click="jump(v.ID)"
                 type="button"
                 data-toggle="tooltip"
                 :title="'参选人数='+v.num.participant+'.目标人数='+v.num.executer"
-                class="btn btn-outline-dark btn-lg rounded-circle round-btn-200"
-                ><i class="el-icon-caret-right"></i> {{v.title}}</button>
+                class="btn btn-outline-dark btn-lg rounded-circle round-btn-150"
+                ><i class="el-icon-caret-right font-size-x2"></i></button>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12" >
+            <div class="col-md-9" style="margin-bottom:10px;">
+                <h4>选举名称 = {{v.title}}</h4>
+                <h4>参选人数 = {{v.num.participant}}</h4>
+                <h4>目标人数 = {{v.num.executer}}</h4>
             </div>
         </div>
 
