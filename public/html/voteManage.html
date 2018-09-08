@@ -80,7 +80,7 @@
                     </el-switch>
                 </h3>
             </div>
-            <div class="col-md-2" v-for="(v, i) in vote.executer">
+            <div class="col-md-2 margin-bottom-5" v-for="(v, i) in vote.executer">
                 <el-tag type="success">{{v}}</el-tag>
                 <el-tag v-show="showPass" type="info">{{vote.pass[v]}}</el-tag>
             </div>
