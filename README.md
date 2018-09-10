@@ -30,6 +30,11 @@ run server
 <script src="https://unpkg.com/ionicons@4.2.2/dist/ionicons.js"></script>
 
 <ion-icon name="add" size="large"></ion-icon>
+
+<!-- Element UI -->
+<link rel="stylesheet" href="css/elementUI/index.css">
+<script src="js/elementUI/index.js"></script>
+
 ```
 
 ## repo statistics
