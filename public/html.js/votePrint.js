@@ -193,8 +193,14 @@ var app = new Vue({
         setExecuter(executer) {
             let _this = this
             _this.ticketList = []
-            if (executer!=undefined) {
+            
+            // let exec = executer=="admin" ? "boss":executer
+
+            console.log(executer)
+            if (executer!=undefined && executer!="admin") {
                 _this.staticTicketList.forEach(element => {
+                    console.log(element.executer)
+
                     if (element.executer==executer) {
                         _this.ticketList.push(element)
                     }
@@ -277,6 +283,7 @@ var app = new Vue({
         changeType () {
             if (this.print.type=='report') {
                 this.print.selectValue = "admin"
+                this.setExecuter(this.print.selectValue)
             }
         },
         callPrint () {
