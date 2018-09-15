@@ -2,7 +2,7 @@
 
 a working log
 
-## 2018 08 09
+## 2018-08-09
 
 1. ~~Export to excel~~
 2. ~~use table for tickets list~~
@@ -14,3 +14,7 @@ a working log
 8. ~~全部汉化~~
 9. ~~自动筛选出全部入选人, 限制条件添加`超过半数以上票数`, 30: >15, 29: >14~~
 10. ~~boss页面自动刷新, 列表`倒序`排列~~
+
+## 2018-09-16
+
+version 1.1 almost done.
