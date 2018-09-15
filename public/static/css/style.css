@@ -9,6 +9,10 @@ font-Kaiti {
   font-family: "STKaiti";
 }
 
+.opacity-50 {
+  opacity:0.1;
+}
+
 a {
   color: #00B7FF;
 }

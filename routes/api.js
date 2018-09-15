@@ -84,7 +84,7 @@ router.post('/vote/:method', async function(req, res, next) {
       break;
   }
   
-  console.log(method + "!!!!!")
+  // console.log(method + "!!!!!")
   res.send(R);
   
 });
