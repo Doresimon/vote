@@ -76,6 +76,7 @@ var app = new Vue({
                 }
             }
         },
+        colNum:3
     },
     methods: {
         callModal (ele) {
@@ -404,6 +405,7 @@ var app = new Vue({
         await this.getTicketList()
         this.setAllTicket(1)
         this.calTicketSum()
+        this.colNum = this.vote.num.participant<=20 ? 2:3
         if (this.user.role == "admin") {
             this.sw.show.btn.addTicket  =   true
             this.sw.show.btn.refresh    =   true

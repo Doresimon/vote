@@ -9,6 +9,14 @@ font-Kaiti {
   font-family: "STKaiti";
 }
 
+.max-width-90{
+  max-width: 90%;
+}
+
+.max-width-60{
+  max-width: 60%;
+}
+
 .opacity-50 {
   opacity:0.1;
 }
