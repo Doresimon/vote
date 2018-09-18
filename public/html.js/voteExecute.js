@@ -62,6 +62,8 @@ var app = new Vue({
         ticketList:[],
         order:true,
         busy: false,
+        posting: false,
+        STDTIME: 0,
         sw:{
             show:{
                 btn:{
@@ -136,13 +138,21 @@ var app = new Vue({
         },
         addTicket () {
             let _this = this
+            console.log("addTicket ()",_this.busy)
+            if (_this.busy) {return}
+            _this.busy = true
+            _this.STDTIME = (new Date()).getTime()
+            let T = _this.STDTIME
+
+            setTimeout(() => { // to make sure there is no duplicated post...
+                
+            if (T!=_this.STDTIME) {return}
+            
             let ele = "#MODAL-ADD-TICKET"
             let D = {
                 ID: _this.vote.ID,
                 add: _this.add,
             }
-            console.log(D)
-            _this.busy = true
 
             axios.post('/api/vote/addTicket', D)
             .then(function (response) { // handle success
@@ -183,6 +193,8 @@ var app = new Vue({
             .then(function () {         // always executed
                 _this.busy = false
             });
+
+            }, 500);
 
         },
         getTicketList () {

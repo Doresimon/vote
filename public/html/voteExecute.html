@@ -362,7 +362,7 @@
                 </div>
                 <div class="col-md-1">
                     <button 
-                    @click="addTicket()"
+                    @click.stop="addTicket()"
                     :disabled="busy || add.otherName!=''"
                     type="button" 
                     class="btn btn-block btn-primary"
