@@ -60,9 +60,9 @@ var app = new Vue({
         },
         ticketSum:[],
         ticketList:[],
-        order:true,
-        busy: false,
-        posting: false,
+        order:  true,
+        busy:   false,
+        participantStr: "",
         STDTIME: 0,
         sw:{
             show:{
@@ -131,6 +131,15 @@ var app = new Vue({
             return p
         },
         addOther () {
+            if (this.participantStr.indexOf(this.add.otherName)!=-1) {
+                this.$notify({
+                    title: '无法添加',
+                    message: '该候选人已存在',
+                    type: 'danger'
+                  });
+                this.add.otherName = ""
+                return
+            }
             this.add.other.push(this.add.otherName)
             this.add.total++
             this.add.otherName = ""
@@ -418,6 +427,7 @@ var app = new Vue({
         this.setAllTicket(1)
         this.calTicketSum()
         this.colNum = this.vote.num.participant<=20 ? 2:3
+        this.participantStr = this.vote.participant.join(".")
         if (this.user.role == "admin") {
             this.sw.show.btn.addTicket  =   true
             this.sw.show.btn.refresh    =   true
