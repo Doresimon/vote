@@ -157,7 +157,7 @@
                     >
                         <template slot-scope="scope">
                             <span v-if="scope.row.total > vote.num.target" style="color:rgb(110, 0, 0)"><i class="el-icon-close"></i> 无效</span>
-                            <span v-else-if="scope.row.total == 0" style="color:rgb(110, 110, 110)"><i class="el-icon-delete"></i> 弃权</span>
+                            <!-- <span v-else-if="scope.row.total == 0" style="color:rgb(110, 110, 110)"><i class="el-icon-delete"></i> 弃权</span> -->
                             <span v-else style="color:rgb(0, 110, 0)"><i class="el-icon-check"></i> 有效</span>
                         </template>
                     </el-table-column>
