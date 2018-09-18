@@ -18,3 +18,11 @@ a working log
 ## 2018-09-16
 
 version 1.1 almost done.
+
+## 2018-09-18
+
+add delete function for admin
+
+cannot add duplicate name for add other
+
+change order at print page...
