@@ -294,9 +294,9 @@
                             @click="toggleTicket(Math.floor((vote.num.participant+colNum-1)/colNum)*i+j)"
                             type="button" 
                             :class="['btn','btn-lg','btn-block',
-                            { 'btn-outline-secondary': add.value[Math.floor((vote.num.participant+colNum-1)/colNum)*i+j]==0,
+                            { 'btn-secondary': add.value[Math.floor((vote.num.participant+colNum-1)/colNum)*i+j]==0,
                               'btn-outline-success': add.value[Math.floor((vote.num.participant+colNum-1)/colNum)*i+j]==1,
-                              'btn-outline-danger': add.value[Math.floor((vote.num.participant+colNum-1)/colNum)*i+j]==-1, }]"
+                              'btn-danger': add.value[Math.floor((vote.num.participant+colNum-1)/colNum)*i+j]==-1, }]"
                             >
                                 <span class="float-left" style="margin-right:3px;">{{("0" + (Math.floor((vote.num.participant+colNum-1)/colNum) * i + j + 1)).substr(-2)}} </span>
                                 <span class="float-left"> - {{vote.participant[Math.floor((vote.num.participant+colNum-1)/colNum)*i+j]}}</span>

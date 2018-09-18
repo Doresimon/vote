@@ -214,8 +214,9 @@ var app = new Vue({
             this.setOtherData()
         },
         setPrintData() {
+            console.log("setPrintData()")
 
-            if (this.print.type==1) {
+            if (this.print.type=="result") {
                 this.ticketSum.sort(this.asc_ID)
             }else{
                 this.ticketSum.sort(this.desc_cnt)
@@ -331,7 +332,7 @@ var app = new Vue({
 
 
         let d = new Date()
-        this.today = d.getFullYear() + '年' + d.getMonth() + '月' + d.getDate() + '日'
+        this.today = d.getFullYear() + '年' + (d.getMonth()+1) + '月' + d.getDate() + '日'
         
     }
   })
