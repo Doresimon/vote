@@ -146,15 +146,8 @@ var app = new Vue({
         },
         addTicket () {
             let _this = this
-            // console.log("addTicket ()",_this.busy)
             if (_this.busy) {return}
             _this.busy = true
-            // _this.STDTIME = (new Date()).getTime()
-            // let T = _this.STDTIME
-
-            // setTimeout(() => { // to make sure there is no duplicated post...
-                
-            // if (T!=_this.STDTIME) {return}
             
             let ele = "#MODAL-ADD-TICKET"
             let D = {
@@ -202,7 +195,51 @@ var app = new Vue({
                 _this.busy = false
             });
 
-            // }, 500);
+        },
+        removeTicketConfirm (row) {
+            let _this= this
+            _this.$confirm('此操作将删除'+row.ID+'号投票, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+              }).then(() => {
+                _this.removeTicket(row)
+              }).catch(() => {
+                _this.$notify({
+                    title: '已取消删除',
+                    message: '~',
+                    type: 'info'
+                  });  
+              });
+        },
+        removeTicket (row) {
+            let _this = this
+            if (_this.busy) {return}
+            _this.busy = true
+            
+            let D = {
+                VoteID: _this.vote.ID,
+                TicketID:row.ID,
+            }
+
+            axios.post('/api/vote/removeTicket', D)
+            .then(function (response) { // handle success
+                console.log(response.data);
+
+                _this.$notify({
+                    title: '移除选票成功',
+                    message: '页面即将刷新, 请勿操作.',
+                    type: 'warning'
+                  });
+
+                app.refreshInfo()
+            })
+            .catch(function (error) {   // handle error
+                console.log(error);
+            })
+            .then(function () {         // always executed
+                _this.busy = false
+            });
 
         },
         getTicketList () {

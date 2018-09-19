@@ -50,10 +50,6 @@ router.post('/vote/:method', async function(req, res, next) {
   let D = req.body
   let R = {}
 
-  // let username = "boss"
-  // let username = "1@vote-1"
-  // let username = "4@vote-1"
-  let now = (new Date()).getTime()
   let username = req.session.name
   if (username==undefined){
     console.log(method,"no user")
@@ -70,12 +66,16 @@ router.post('/vote/:method', async function(req, res, next) {
       break;
     case "addTicket":
       // forbid double post
+      let now = (new Date()).getTime()
       if (lastPost[username]!=undefined && (now - lastPost[username]) < 1000) {
         R.code = "blocked"
       }else{
         lastPost[username] = now
         R.code = await VoteUtil.addTicket(D, username)
       }
+      break;
+    case "removeTicket":
+      R.code = await VoteUtil.removeTicket(D, username)
       break;
     case "getVoteList":
       R.voteList = await VoteUtil.getVoteList(username)
@@ -92,7 +92,6 @@ router.post('/vote/:method', async function(req, res, next) {
       break;
   }
   
-  // console.log(method + "!!!!!")
   res.send(R);
   
 });

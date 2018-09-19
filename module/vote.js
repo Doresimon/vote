@@ -110,10 +110,6 @@ let vote = {
         }
 
         let db_vote_detail_list = DBUtil.root.vote.detail[vote.ID].db
-        // let total = 0
-        // for (let i = 0; i < D.add.value.length; i++) {
-        //     total += D.add.value[i]
-        // }
 
         let T = {
             ID: vote.ticketCount,
@@ -122,6 +118,7 @@ let vote = {
             total: D.add.total,
             value: D.add.value,
             other: D.add.other,
+            status: true,
         }
 
         vote.ticket.push({
@@ -134,8 +131,45 @@ let vote = {
         code["ID"] = T.ID
         code["ticket"] = await DBUtil.put(db_vote_detail_list, T.ID, T)
         code["vote"] = await DBUtil.put(db_vote_list, vote.ID, vote)
+        
+        return code
+    },
+    removeTicket: async function(D, name){
+        let db_user = DBUtil.root.user.db
+        let db_vote_list = DBUtil.root.vote.list.db
 
-        // console.log(code)
+        let vote = await DBUtil.get(db_vote_list, D.VoteID)
+        let user = await DBUtil.get(db_user, name)
+        // vote.ticketCount++
+
+        if (user.role != "admin" ) {
+            console.log("removeTicket()!!!!!!!!!!!!!!")
+            console.log("not admin", user.name)
+            return {}
+        }
+
+        if (DBUtil.root.vote.detail[vote.ID]==undefined){
+            DBUtil.root.vote.detail[vote.ID] = {}
+            DBUtil.root.vote.detail[vote.ID].db = level('./LEVELDB/vote/detail/'+vote.ID)
+        }
+
+        let db_vote_detail_list = DBUtil.root.vote.detail[vote.ID].db
+
+        let T = await DBUtil.get(db_vote_detail_list, D.TicketID)
+
+        if (T =={} ) {
+            console.log("removeTicket()")
+            console.log("ID not found")
+            return {}
+        }
+
+        T.status = false
+        T.remark = "deleted at " + (new Date()).getTime() + " by " + user.name
+        
+        let code = {}
+        code["executer"] = name
+        code["ID"] = T.ID
+        code["ticket"] = await DBUtil.put(db_vote_detail_list, T.ID, T)
 
         return code
     },
@@ -162,7 +196,9 @@ let vote = {
             let T = vote.ticket[i]
             if (T.executer==name || user.role=="admin") {
                 let one = await DBUtil.get(db_vote_detail_list, T.ID)
-                ticketList.push(one)
+                if (one.status!=false) {
+                    ticketList.push(one)
+                }
             }            
         }
 
