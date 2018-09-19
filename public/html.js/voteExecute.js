@@ -63,7 +63,6 @@ var app = new Vue({
         order:  true,
         busy:   false,
         participantStr: "",
-        STDTIME: 0,
         sw:{
             show:{
                 btn:{
@@ -147,15 +146,15 @@ var app = new Vue({
         },
         addTicket () {
             let _this = this
-            console.log("addTicket ()",_this.busy)
+            // console.log("addTicket ()",_this.busy)
             if (_this.busy) {return}
             _this.busy = true
-            _this.STDTIME = (new Date()).getTime()
-            let T = _this.STDTIME
+            // _this.STDTIME = (new Date()).getTime()
+            // let T = _this.STDTIME
 
-            setTimeout(() => { // to make sure there is no duplicated post...
+            // setTimeout(() => { // to make sure there is no duplicated post...
                 
-            if (T!=_this.STDTIME) {return}
+            // if (T!=_this.STDTIME) {return}
             
             let ele = "#MODAL-ADD-TICKET"
             let D = {
@@ -203,7 +202,7 @@ var app = new Vue({
                 _this.busy = false
             });
 
-            }, 500);
+            // }, 500);
 
         },
         getTicketList () {

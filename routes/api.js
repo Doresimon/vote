@@ -6,6 +6,7 @@ let DBUtil = require('../module/leveldb');
 let VoteUtil = require('../module/vote');
 
 const hour = 60*60*1000
+let lastPost = {}
 
 /* authenticate user's login info */
 router.post('/auth', async function(req, res, next) {
@@ -52,6 +53,7 @@ router.post('/vote/:method', async function(req, res, next) {
   // let username = "boss"
   // let username = "1@vote-1"
   // let username = "4@vote-1"
+  let now = (new Date()).getTime()
   let username = req.session.name
   if (username==undefined){
     console.log(method,"no user")
@@ -67,7 +69,13 @@ router.post('/vote/:method', async function(req, res, next) {
       R.code = await VoteUtil.addParticipant(D)
       break;
     case "addTicket":
-      R.code = await VoteUtil.addTicket(D, username)
+      // forbid double post
+      if (lastPost[username]!=undefined && (now - lastPost[username]) < 1000) {
+        R.code = "blocked"
+      }else{
+        lastPost[username] = now
+        R.code = await VoteUtil.addTicket(D, username)
+      }
       break;
     case "getVoteList":
       R.voteList = await VoteUtil.getVoteList(username)
