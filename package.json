@@ -15,6 +15,7 @@
     "morgan": "~1.9.0",
     "nodemailer": "^4.6.7",
     "vue-good-table": "^2.13.0",
+    "xlsx": "^0.14.0",
     "xlsx-populate": "^1.17.0"
   }
 }

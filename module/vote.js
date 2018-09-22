@@ -34,6 +34,7 @@ let vote = {
         D.executer = exec
         D.ticket = []
         D.ticketCount = 0
+        D.extraTicket = {}
 
         let code = []
 
@@ -88,6 +89,17 @@ let vote = {
         let one = await DBUtil.get(db_vote_list, ID)
 
         one.participant = participant
+        one.extraTicket = {}
+
+        for (let i = 0; i < participant.length; i++) {
+            const e = participant[i];
+            one.extraTicket[e] = {
+                name:e,
+                approve:0,
+                reject:0,
+                giveup:0,
+            }
+        }
 
         return await DBUtil.put(db_vote_list, ID, one)
     },
@@ -130,6 +142,27 @@ let vote = {
         code["executer"] = name
         code["ID"] = T.ID
         code["ticket"] = await DBUtil.put(db_vote_detail_list, T.ID, T)
+        code["vote"] = await DBUtil.put(db_vote_list, vote.ID, vote)
+        
+        return code
+    },
+    addExtraTicket: async function(D, name){
+        let db_user = DBUtil.root.user.db
+        let db_vote_list = DBUtil.root.vote.list.db
+
+        let vote = await DBUtil.get(db_vote_list, D.ID)
+        let user = await DBUtil.get(db_user, name)
+
+        if (user.role == "executer" && user.vote != D.ID) {
+            console.log("ZZZZZZZZ")
+            return {}
+        }
+
+        vote.extraTicket = D.extraTicket
+        
+        let code = {}
+        code["executer"] = name
+        code["ID"] = vote.ID
         code["vote"] = await DBUtil.put(db_vote_list, vote.ID, vote)
         
         return code

@@ -30,6 +30,7 @@ var app = new Vue({
             participant:[],
             executer:[],
             ticket:[],
+            extraTicket:{},
         },
         user:{
             name:"",
@@ -125,6 +126,12 @@ var app = new Vue({
                     this.ticketStat.invalid++
                 }
             }
+
+            let tmp = this.vote.extraTicket[this.vote.participant[0]]
+
+            // add extra
+            this.ticketStat.total += tmp.approve + tmp.reject + tmp.giveup
+            this.ticketStat.valid += tmp.approve + tmp.reject + tmp.giveup
         },
         calTicketSum () {
             let sum = []
@@ -161,7 +168,19 @@ var app = new Vue({
                     order: -1,
                     status: -1,
                 }
+
+
+
             }
+            // add extra ticket result
+            for (let i = 0; i < sum.length; i++) {
+                // sum[i].extraCnt = this.vote.extraTicket[sum[i].participant].approve
+                sum[i].cnt += this.vote.extraTicket[sum[i].participant].approve
+                sum[i].cntGiveUp += this.vote.extraTicket[sum[i].participant].giveup
+                sum[i].cntReject += this.vote.extraTicket[sum[i].participant].reject
+            }
+
+
             sum.sort(this.desc_cnt)
             for (const i in sum) {
                 sum[i].order = i

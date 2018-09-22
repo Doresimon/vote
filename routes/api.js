@@ -56,6 +56,8 @@ router.post('/vote/:method', async function(req, res, next) {
     res.status(400).send("hello???");
     return
   }
+  
+  let now = (new Date()).getTime()
 
   switch (method) {
     case "addVote":
@@ -66,12 +68,20 @@ router.post('/vote/:method', async function(req, res, next) {
       break;
     case "addTicket":
       // forbid double post
-      let now = (new Date()).getTime()
       if (lastPost[username]!=undefined && (now - lastPost[username]) < 1000) {
         R.code = "blocked"
       }else{
         lastPost[username] = now
         R.code = await VoteUtil.addTicket(D, username)
+      }
+      break;
+    case "addExtraTicket":
+      // forbid double post
+      if (lastPost[username]!=undefined && (now - lastPost[username]) < 1000) {
+        R.code = "blocked"
+      }else{
+        lastPost[username] = now
+        R.code = await VoteUtil.addExtraTicket(D, username)
       }
       break;
     case "removeTicket":

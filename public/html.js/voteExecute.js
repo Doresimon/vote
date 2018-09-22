@@ -45,6 +45,7 @@ var app = new Vue({
             participant:[],
             executer:[],
             ticket:[],
+            extraTicket:{},
         },
         user:{
             name:"",
@@ -77,7 +78,8 @@ var app = new Vue({
                 }
             }
         },
-        colNum:3
+        colNum:3,
+        addExtraStr: '',
     },
     methods: {
         callModal (ele) {
@@ -356,10 +358,19 @@ var app = new Vue({
                     ID: i,
                     participant: this.vote.participant[i],
                     cnt: cnt,
+                    pureCnt: cnt,
+                    extraCnt: cnt,
                     order: -1,
                     status: -1,
                 }
             }
+
+            // add extra ticket result
+            for (let i = 0; i < sum.length; i++) {
+                sum[i].extraCnt = this.vote.extraTicket[sum[i].participant].approve
+                sum[i].cnt += sum[i].extraCnt
+            }
+
             sum.sort(this.desc_cnt)
             for (const i in sum) {
                 sum[i].order = i
@@ -449,8 +460,65 @@ var app = new Vue({
                 console.log("OFF")
             }
         },
-        jump: function (ID) {
+        jump (ID) {
             func.jumpNew("votePrint.html?voteID="+ID)
+        },
+        parseExtraStr () {
+            let _this = this
+            let str = _this.addExtraStr
+
+            let tab = String.fromCharCode(9)
+            let enter = String.fromCharCode(10)
+
+            let all = str.split(enter);
+            let extraTicket = {}
+
+            for (let i = 1; i < all.length; i++) {
+                all[i] = all[i].trim()
+
+                let line = all[i].split(tab)
+
+                if (line[0]=="姓名"||line.length<4) {
+                    continue
+                }
+
+                for (let c = 0; c < line.length/4; c++) {
+                    
+                    let tmp = {}
+                    tmp.name = line[4*c+0].replace(/\s+/g,'')
+                    tmp.approve = parseInt(line[4*c+1])
+                    tmp.reject = parseInt(line[4*c+2])
+                    tmp.giveup = parseInt(line[4*c+3])
+
+                    extraTicket[tmp.name] = tmp
+                }       
+
+            }
+
+            _this.vote.extraTicket = extraTicket
+        },
+        addExtraTicket () {
+            let _this = this
+            if (_this.busy) {return}
+            _this.busy = true
+            
+            let ele = "#MODAL-ADD-EXTRA-TICKET"
+            let D = {
+                ID: _this.vote.ID,
+                extraTicket: _this.vote.extraTicket,
+            }
+
+            axios.post('/api/vote/addExtraTicket', D)
+            .then(function (response) { // handle success
+                console.log(response.data);
+            })
+            .catch(function (error) {   // handle error
+                console.log(error);
+            })
+            .then(function () {         // always executed
+                _this.closeModal(ele)
+                _this.busy = false
+            });
         },
     },
     created: async function () {
