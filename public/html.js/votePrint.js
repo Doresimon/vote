@@ -304,6 +304,8 @@ var app = new Vue({
             if (this.print.type=='report') {
                 this.print.selectValue = "admin"
                 this.setExecuter(this.print.selectValue)
+            }else{
+                this.setExecuter(this.print.selectValue)
             }
         },
         callPrint () {
