@@ -75,13 +75,14 @@
                 class="form-control">
                     <option value="result">计票结果单</option>
                     <option value="report">计票结果报告单</option>
+                    <option value="winner">当选名单</option>
                 </select>
             </div>
             <div class="col-md-6 text-center margin-bottom-10" >
                 <select 
                 @change="setExecuter(print.selectValue)"
                 v-model="print.selectValue"
-                :disabled="print.type=='report' || user.role!='admin'"
+                :disabled="print.type=='report' || print.type=='winner' || user.role!='admin'"
                 class="form-control">
                     <option value="admin">总计</option>
                     <option 
@@ -105,6 +106,7 @@
             <div class="row margin-bottom-20">
                 <div class="col-md-12 text-center" >
                     <h1>{{vote.title}}</h1>
+                    <h1>{{vote.subtitle}}</h1>
                     <h1>
                         <span v-show="print.selectValue!='admin'">小组</span><span v-show="print.selectValue=='admin'">总</span>计票结果单
                     </h1>
@@ -127,7 +129,7 @@
                 <div class="col-md-12" v-show="print.selectValue=='admin'">
                     <p>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        {{vote.title}}应到代表290名，
+                        本次选举应到代表 {{vote.num.voter}} 名，
                         实到代表（<span class="print-hide"><input 
                             v-model="ticketStat.here"
                             type="text" 
@@ -257,6 +259,7 @@
             <div class="row margin-bottom-20">
                 <div class="col-md-12 text-center" >
                     <h1>{{vote.title}}</h1>
+                    <h1>{{vote.subtitle}}</h1>
                     <h1>
                         <span v-show="print.selectValue!='admin'">小组</span><span v-show="print.selectValue=='admin'"></span>计票结果报告单
                     </h1>
@@ -264,7 +267,7 @@
                 <div class="col-md-12" >
                     <p>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        {{vote.title}}应到代表290名，
+                        本次选举应到代表 {{vote.num.voter}} 名，
                         实到代表（<span class="print-hide"><input 
                             v-model="ticketStat.here"
                             type="text" 
@@ -353,6 +356,80 @@
                             </tr>
                         </tbody>
                     </table>
+                </div>
+            </div>
+
+            <div class="row margin-bottom-20">
+                <div class="col-md-6" >
+                    <strong>总监票人: </strong>
+                </div>
+                <div class="col-md-6" >
+                    <strong>总计票人: </strong>
+                </div>
+            </div>
+            <div class="row margin-bottom-20">
+                <div class="col-md-12 text-right" >
+                    <strong>{{today}}</strong>
+                </div>
+            </div>
+
+        </div>
+        </div>
+
+
+        <!-- winner -->
+        <div class="row" v-if="print.type=='winner'">
+        <div class="col-md-12">
+
+            <div class="row margin-bottom-20">
+                <div class="col-md-12 text-center" >
+                    <h1>{{vote.title}}</h1>
+                    <h1>{{vote.subtitle}}</h1>
+                    <h1>
+                        当选名单
+                    </h1>
+                </div>
+                <div class="col-md-12" >
+                    <p>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        根据选举办法和计票结果，
+                        以下
+                        {{table.winner.length}}
+                        位候选人当选为{{vote.subtitle.replace('选举','')}}（按姓氏笔画排序）：
+                    </p>
+                </div>
+            </div>
+
+            <div class="row margin-bottom-20">
+                <!-- <div class="col-md-12" >
+                    <span v-for="(w,k) in table.winner">
+                        {{w.participant}}、
+                    </span>
+                </div> -->
+                <div class="col-md-12" >
+                    <span>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        {{table.winner.join("、")}}
+                    </span>
+                </div>
+            </div>
+            <div class="row margin-bottom-20">
+                <div class="col-md-12" >
+                    <p>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        以下
+                        {{table.winnerEX.length}}
+                        位候选人票数持平（按姓氏笔画排序）：
+                    </p>
+                </div>
+            </div>
+
+            <div class="row margin-bottom-20">
+                <div class="col-md-12" >
+                    <span>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        {{table.winnerEX.join("、")}}
+                    </span>
                 </div>
             </div>
 

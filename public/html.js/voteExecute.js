@@ -36,11 +36,13 @@ var app = new Vue({
         vote:{
             ID: 0,
             date:"",
-            title:"",
+            title:"",       // 大会名称
+            subtitle:"选举名称",    // 选举名称
             num:{
                 executer: 1,
                 participant: 1,
                 target: 1,
+                voter: 1,
             },
             participant:[],
             executer:[],
@@ -378,20 +380,15 @@ var app = new Vue({
             let end = sum[this.vote.num.target-1]
             let endnext = sum[this.vote.num.target]
             let d = end.cnt == endnext.cnt ? 0 : 1
-            // let c = 0
+            
             for (const i in sum) {
                 if (sum[i].cnt > end.cnt) {     //当选
                     sum[i].status = 1
                 }
                 if (sum[i].cnt == end.cnt) {    //平票
                     sum[i].status = d
-                    // c += (i >= this.vote.num.target-1) ? 1 : 0
                 }
             }
-            // if (c > 0) {
-            //     end.status = 1
-            // }
-
             sum.sort(this.asc_ID)
             this.ticketSum = sum
             this.sortTicketSum()

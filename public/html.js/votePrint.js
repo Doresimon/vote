@@ -16,6 +16,8 @@ var app = new Vue({
                 left:[],
                 right:[],
             },
+            winner:[],
+            winnerEX:[],
         },
         other: [],
         vote:{
@@ -169,8 +171,6 @@ var app = new Vue({
                     status: -1,
                 }
 
-
-
             }
             // add extra ticket result
             for (let i = 0; i < sum.length; i++) {
@@ -188,12 +188,12 @@ var app = new Vue({
             let end = sum[this.vote.num.target-1]
             let endnext = sum[this.vote.num.target]
             let d = end.cnt == endnext.cnt ? 0 : 1
-            // let c = 0
+            
             for (const i in sum) {
-                if (sum[i].cnt > end.cnt) {     //当选
+                if (sum[i].cnt > end.cnt) {     // 当选
                     sum[i].status = 1
                 }
-                if (sum[i].cnt == end.cnt) {    //平票
+                if (sum[i].cnt == end.cnt) {    // 平票
                     sum[i].status = d
                 }
             }
@@ -300,12 +300,34 @@ var app = new Vue({
                 }
             }
         },
+        setWinnerData() {
+            console.log("setWinnerData()")
+            this.ticketSum.sort(this.asc_ID)
+            this.table.winner = []
+            this.table.winnerEX = []
+
+            for (let i = 0; i < this.ticketSum.length; i++) {
+                const e = this.ticketSum[i];
+                if (e.status==1) {
+                    this.table.winner.push(e.participant)
+                }
+                if (e.status==0) {
+                    this.table.winnerEX.push(e.participant)
+                }
+            }
+        },
         changeType () {
+            if (this.print.type=='result') {
+                this.setExecuter(this.print.selectValue)
+            }
             if (this.print.type=='report') {
                 this.print.selectValue = "admin"
                 this.setExecuter(this.print.selectValue)
-            }else{
+            }
+            if (this.print.type=='winner') {
+                this.print.selectValue = "admin"
                 this.setExecuter(this.print.selectValue)
+                this.setWinnerData()
             }
         },
         callPrint () {
@@ -329,8 +351,6 @@ var app = new Vue({
         },
     },
     created: async function () {
-        // this.print.type =   func.getParam("type")
-        
         this.print.type =   "result"
         this.vote.ID    =   func.getParam("voteID")
         this.user.name  =   func.getCookie('name')

@@ -12,10 +12,12 @@ var app = new Vue({
         busy: false,
         add: {
             title:"",
+            subtitle:"",
             num:{
                 executer: 1,
                 participant: 1,
                 target: 1,
+                voter: 1,
             },
             participant:[],
         },

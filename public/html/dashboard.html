@@ -69,10 +69,16 @@
                 ><i class="el-icon-caret-right font-size-x2"></i></button>
             </div>
             <div class="col-md-9" style="margin-bottom:10px;">
-                <h4>选举名称 = {{v.title}}</h4>
-                <h4>参选人数 = {{v.num.participant}}</h4>
-                <h4>应选人数 = {{v.num.target}}</h4>
-                <h4>计票分组 = {{v.num.executer}}</h4>
+                <h4>大会名称 = {{v.title}}</h4>
+                <h4>选举名称 = {{v.subtitle}}</h4>
+                <h4>
+                    <span class="span-inline width-200">计票人数 = {{v.num.executer}}</span>
+                    <span class="span-inline width-200">应到人数 = {{v.num.voter}}</span>
+                </h4>
+                <h4>
+                    <span class="span-inline width-200">当选人数 = {{v.num.target}}</span>
+                    <span class="span-inline width-200">候选人数 = {{v.num.participant}}</span>
+                </h4>
             </div>
         </div>
 
@@ -91,10 +97,22 @@
                 <div class="row">
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
-                            <span class="input-group-text">选举名称</span>
+                            <span class="input-group-text">大会名称</span>
                         </div>
                         <input 
                         v-model.trim="add.title"
+                        type="text" 
+                        class="form-control" 
+                        placeholder="大会名称">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">选举名称</span>
+                        </div>
+                        <input 
+                        v-model.trim="add.subtitle"
                         type="text" 
                         class="form-control" 
                         placeholder="选举名称">
@@ -107,6 +125,18 @@
                         </div>
                         <input 
                         v-model.number="add.num.executer"
+                        type="number" 
+                        class="form-control" 
+                        min="1">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">应到人数</span>
+                        </div>
+                        <input 
+                        v-model.number="add.num.voter"
                         type="number" 
                         class="form-control" 
                         min="1">
