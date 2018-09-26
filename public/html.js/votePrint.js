@@ -308,11 +308,18 @@ var app = new Vue({
 
             for (let i = 0; i < this.ticketSum.length; i++) {
                 const e = this.ticketSum[i];
+                let p = e.participant
+                console.log(p)
+                console.log(p.length)
+                if (p.length==2) {
+                    p = e.participant.substring(0, 1) + "　" + e.participant.substring(1, 2) 
+                }
+                
                 if (e.status==1) {
-                    this.table.winner.push(e.participant)
+                    this.table.winner.push(p)
                 }
                 if (e.status==0) {
-                    this.table.winnerEX.push(e.participant)
+                    this.table.winnerEX.push(p)
                 }
             }
         },

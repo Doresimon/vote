@@ -114,21 +114,21 @@
 
                 <div class="col-md-12" v-show="print.selectValue!='admin'">
                     <p> 
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;
                         本小组统计
                         选票（&nbsp;&nbsp;{{ticketStat.total}}&nbsp;&nbsp;）张，
                         其中无效票（&nbsp;&nbsp;{{ticketStat.invalid}}&nbsp;&nbsp;）张，
                         有效票（&nbsp;&nbsp;{{ticketStat.valid}}&nbsp;&nbsp;）张。
                     </p>
                     <p> 
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;
                         计票结果如下：
                     </p>
                 </div>
                 
                 <div class="col-md-12" v-show="print.selectValue=='admin'">
                     <p>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;
                         本次选举应到代表 {{vote.num.voter}} 名，
                         实到代表（<span class="print-hide"><input 
                             v-model="ticketStat.here"
@@ -141,7 +141,7 @@
                         有效票（&nbsp;&nbsp;{{ticketStat.valid}}&nbsp;&nbsp;）张。
                     </p>
                     <p> 
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;
                         计票结果如下（按姓氏笔画为序）：
                     </p>
                 </div>
@@ -266,7 +266,7 @@
                 </div>
                 <div class="col-md-12" >
                     <p>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;
                         本次选举应到代表 {{vote.num.voter}} 名，
                         实到代表（<span class="print-hide"><input 
                             v-model="ticketStat.here"
@@ -279,7 +279,7 @@
                         有效票（&nbsp;&nbsp;{{ticketStat.valid}}&nbsp;&nbsp;）张。
                     </p>
                     <p> 
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;
                         计票结果如下（按得票多少为序）：
                     </p>
                 </div>
@@ -378,20 +378,21 @@
 
 
         <!-- winner -->
-        <div class="row" v-if="print.type=='winner'">
+        <div class="row" v-if="print.type=='winner'" >
         <div class="col-md-12">
 
-            <div class="row margin-bottom-20">
-                <div class="col-md-12 text-center" >
+            <div class="row" style="margin-bottom:50px">
+                <div class="col-md-12 text-center" style="margin-bottom:50px">
                     <h1>{{vote.title}}</h1>
                     <h1>{{vote.subtitle}}</h1>
                     <h1>
                         当选名单
                     </h1>
                 </div>
+                
                 <div class="col-md-12" >
                     <p>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;
                         根据选举办法和计票结果，
                         以下
                         {{table.winner.length}}
@@ -400,23 +401,67 @@
                 </div>
             </div>
 
-            <div class="row margin-bottom-20">
-                <!-- <div class="col-md-12" >
-                    <span v-for="(w,k) in table.winner">
-                        {{w.participant}}、
+            <div class="row" 
+            style="margin-bottom:100px;" 
+            v-if="table.winner.length>20">
+            <div class="col-md-12">
+
+                <div class="row"
+                style="padding-left:100px;padding-right:100px;"
+                v-for="i in (Math.floor(table.winner.length/6) + 1)">
+                    <div 
+                    class="col-md-2 text-center" 
+                    style="margin-bottom:25px"
+                    v-for="j in 6" >
+                        <span>
+                            {{table.winner[j+(i-1)*6-1]}}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- <div 
+                class="col-md-2 text-center" 
+                style="margin-bottom:25px"
+                v-for="(w, k) in table.winner" >
+                    <span>
+                        {{w}}
                     </span>
                 </div> -->
-                <div class="col-md-12" >
-                    <span>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        {{table.winner.join("、")}}
-                    </span>
+            </div>
+            </div>
+
+            <div class="row" 
+            style="margin-bottom:100px;"
+            v-if="table.winner.length<20">
+            <div class="col-md-12">
+                <div class="row"
+                style="padding-left:100px;padding-right:100px;"
+                v-for="i in (Math.floor(table.winner.length/5) + 1)">
+                    <div 
+                    class="col-md-1" 
+                    style="margin-bottom:25px;">
+                    </div>
+                    <div 
+                    class="col-md-2 text-center" 
+                    style="margin-bottom:25px;"
+                    v-for="j in 5" >
+                        <span>
+                            {{table.winner[j+(i-1)*5-1]}}
+                        </span>
+                    </div>
+                    <div 
+                    class="col-md-1" 
+                    style="margin-bottom:25px;">
+                    </div>
                 </div>
             </div>
-            <div class="row margin-bottom-20">
+            </div>
+
+
+            <!-- <div class="row margin-bottom-20">
                 <div class="col-md-12" >
                     <p>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;
                         以下
                         {{table.winnerEX.length}}
                         位候选人票数持平（按姓氏笔画排序）：
@@ -427,13 +472,13 @@
             <div class="row margin-bottom-20">
                 <div class="col-md-12" >
                     <span>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;
                         {{table.winnerEX.join("、")}}
                     </span>
                 </div>
-            </div>
+            </div> -->
 
-            <div class="row margin-bottom-20">
+            <div class="row" style="margin-bottom:50px">
                 <div class="col-md-6" >
                     <strong>总监票人: </strong>
                 </div>
@@ -441,9 +486,9 @@
                     <strong>总计票人: </strong>
                 </div>
             </div>
-            <div class="row margin-bottom-20">
+            <div class="row">
                 <div class="col-md-12 text-right" >
-                    <strong>{{today}}</strong>
+                    <strong>{{today}}&nbsp;&nbsp;&nbsp;&nbsp;</strong>
                 </div>
             </div>
 
