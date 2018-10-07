@@ -39,6 +39,7 @@ var app = new Vue({
             role:"",
         },
         ticketStat:{
+            out: "",
             here: "",
             total: 0,
             valid: 0,
@@ -270,13 +271,16 @@ var app = new Vue({
                     this.ticketList[i].total<=this.vote.num.target && 
                     this.ticketList[i].other!=undefined) {
                     for (let j = 0; j < this.ticketList[i].other.length; j++) {
-                        if (other[this.ticketList[i].other[j]]==undefined) {
-                            other[this.ticketList[i].other[j]] = 0
+                        let _name = this.ticketList[i].other[j].trim()
+                        if (other[_name]==undefined) {
+                            other[_name] = 0
                         }
-                        other[this.ticketList[i].other[j]]++
+                        other[_name]++
                     }
                 }
             }
+
+            console.log(other)
 
             let sortOther = []
             for (const key in other) {

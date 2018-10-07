@@ -508,6 +508,14 @@ var app = new Vue({
             axios.post('/api/vote/addExtraTicket', D)
             .then(function (response) { // handle success
                 console.log(response.data);
+                _this.$notify({
+                    title: '导入选票成功',
+                    message: '页面即将刷新, 请勿操作.',
+                    type: 'warning'
+                  });
+
+                // app.refreshInfo()
+                location.reload()
             })
             .catch(function (error) {   // handle error
                 console.log(error);

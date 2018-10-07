@@ -60,6 +60,10 @@
                 display: inline;
             }
         }
+
+        .big{
+            font-size: 125%;
+        }
     </style>
 </head>
 <body>
@@ -105,10 +109,10 @@
 
             <div class="row margin-bottom-20">
                 <div class="col-md-12 text-center" >
-                    <h1>{{vote.title}}</h1>
-                    <h1>{{vote.subtitle}}</h1>
+                    <h1 v-show="vote.ID!=3"><b>{{vote.title}}</b></h1>
+                    <h1><b>{{vote.subtitle}}</b></h1>
                     <h1>
-                        <span v-show="print.selectValue!='admin'">小组</span><span v-show="print.selectValue=='admin'">总</span>计票结果单
+                        <b><span v-show="print.selectValue!='admin'">小组</span><span v-show="print.selectValue=='admin'">总</span>计票结果单</b>
                     </h1>
                 </div>
 
@@ -136,7 +140,13 @@
                             style="width:100px;border: 0px;"
                             placeholder="点击输入"
                             ></span><span class="print-show">&nbsp;&nbsp;{{ticketStat.here}}&nbsp;&nbsp;</span>）名，
-                        发出选票（&nbsp;&nbsp;{{ticketStat.total}}&nbsp;&nbsp;）张，
+                        发出选票（<span class="print-hide"><input 
+                            v-model="ticketStat.out"
+                            type="text" 
+                            style="width:100px;border: 0px;"
+                            placeholder="点击输入"
+                            ></span><span class="print-show">&nbsp;&nbsp;{{ticketStat.out}}&nbsp;&nbsp;</span>）张，
+                        回收选票（&nbsp;&nbsp;{{ticketStat.total}}&nbsp;&nbsp;）张，
                         其中无效票（&nbsp;&nbsp;{{ticketStat.invalid}}&nbsp;&nbsp;）张，
                         有效票（&nbsp;&nbsp;{{ticketStat.valid}}&nbsp;&nbsp;）张。
                     </p>
@@ -195,7 +205,7 @@
             </div>
 
             <div class="row margin-bottom-20">
-                <div class="col-md-6 text-center" >
+                <div class="col-md-6 text-center"  v-if="table.printOtherData.left.length!=0">
                     <table style="width:100%;" cellpadding="5">
                         <thead>
                             <tr>
@@ -211,7 +221,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="col-md-6 text-center" >
+                <div class="col-md-6 text-center"  v-if="table.printOtherData.right.length!=0">
                     <table style="width:100%;" cellpadding="5">
                         <thead>
                             <tr>
@@ -256,12 +266,12 @@
         <div class="row" v-if="print.type=='report'">
         <div class="col-md-12">
 
-            <div class="row margin-bottom-20">
+            <div class="row margin-bottom-10">
                 <div class="col-md-12 text-center" >
-                    <h1>{{vote.title}}</h1>
-                    <h1>{{vote.subtitle}}</h1>
+                    <h1 v-show="vote.ID!=3"><b>{{vote.title}}</b></h1>
+                    <h1><b>{{vote.subtitle}}</b></h1>
                     <h1>
-                        <span v-show="print.selectValue!='admin'">小组</span><span v-show="print.selectValue=='admin'"></span>计票结果报告单
+                        <b><span v-show="print.selectValue!='admin'">小组</span><span v-show="print.selectValue=='admin'"></span>计票结果报告单</b>
                     </h1>
                 </div>
                 <div class="col-md-12" >
@@ -274,7 +284,13 @@
                             style="width:100px;border: 0px;"
                             placeholder="点击输入"
                             ></span><span class="print-show">&nbsp;&nbsp;{{ticketStat.here}}&nbsp;&nbsp;</span>）名，
-                        发出选票（&nbsp;&nbsp;{{ticketStat.total}}&nbsp;&nbsp;）张，
+                        发出选票（<span class="print-hide"><input 
+                            v-model="ticketStat.out"
+                            type="text" 
+                            style="width:100px;border: 0px;"
+                            placeholder="点击输入"
+                            ></span><span class="print-show">&nbsp;&nbsp;{{ticketStat.out}}&nbsp;&nbsp;</span>）张，
+                        回收选票（&nbsp;&nbsp;{{ticketStat.total}}&nbsp;&nbsp;）张，
                         其中无效票（&nbsp;&nbsp;{{ticketStat.invalid}}&nbsp;&nbsp;）张，
                         有效票（&nbsp;&nbsp;{{ticketStat.valid}}&nbsp;&nbsp;）张。
                     </p>
@@ -287,19 +303,19 @@
 
             <div class="row margin-bottom-20">
                 <div class="col-md-6 text-center" >
-                    <table style="width:100%;" cellpadding="5">
+                    <table style="width:100%;" cellpadding="5" >
                         <thead>
                             <tr>
-                                <th>排序</th>
-                                <th>候选人</th>
-                                <th>得赞成票数</th>
+                                <th class="big">排序</th>
+                                <th class="big">候选人</th>
+                                <th class="big">得赞成票数</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="(v, i) in table.printData.left">
-                                <td> {{v.ID}} </td>
-                                <td> {{v.participant}} </td>
-                                <td> {{v.cnt}} </td>
+                                <td class="big"> {{v.ID}} </td>
+                                <td class="big"> {{v.participant}} </td>
+                                <td class="big"> {{v.cnt}} </td>
                             </tr>
                         </tbody>
                     </table>
@@ -308,16 +324,16 @@
                     <table style="width:100%;" cellpadding="5">
                         <thead>
                             <tr>
-                                <th>排序</th>
-                                <th>候选人</th>
-                                <th>得赞成票数</th>
+                                <th class="big">排序</th>
+                                <th class="big">候选人</th>
+                                <th class="big">得赞成票数</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="(v, i) in table.printData.right">
-                                <td> {{v.ID}} </td>
-                                <td> {{v.participant}} </td>
-                                <td> {{v.cnt}} </td>
+                                <td class="big"> {{v.ID}} </td>
+                                <td class="big"> {{v.participant}} </td>
+                                <td class="big"> {{v.cnt}} </td>
                             </tr>
                         </tbody>
                     </table>
@@ -325,34 +341,34 @@
             </div>
 
             <div class="row margin-bottom-20">
-                <div class="col-md-6 text-center" >
+                <div class="col-md-6 text-center" v-if="table.printOtherData.left.length!=0">
                     <table style="width:100%;" cellpadding="5">
                         <thead>
                             <tr>
-                                <th>另选人姓名</th>
-                                <th>得赞成票数</th>
+                                <th class="big">另选人姓名</th>
+                                <th class="big">得赞成票数</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="(v, i) in table.printOtherData.left">
-                                <td> {{v.name}} </td>
-                                <td> {{v.cnt}} </td>
+                                <td class="big"> {{v.name}} </td>
+                                <td class="big"> {{v.cnt}} </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                <div class="col-md-6 text-center" >
+                <div class="col-md-6 text-center" v-if="table.printOtherData.right.length!=0">
                     <table style="width:100%;" cellpadding="5">
                         <thead>
                             <tr>
-                                <th>另选人姓名</th>
-                                <th>得赞成票数</th>
+                                <th class="big">另选人姓名</th>
+                                <th class="big">得赞成票数</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="(v, i) in table.printOtherData.right">
-                                <td> {{v.name}} </td>
-                                <td> {{v.cnt}} </td>
+                                <td class="big"> {{v.name}} </td>
+                                <td class="big"> {{v.cnt}} </td>
                             </tr>
                         </tbody>
                     </table>
@@ -368,7 +384,7 @@
                 </div>
             </div>
             <div class="row margin-bottom-20">
-                <div class="col-md-12 text-right" >
+                <div class="col-md-12 text-right">
                     <strong>{{today}}</strong>
                 </div>
             </div>
@@ -378,15 +394,15 @@
 
 
         <!-- winner -->
-        <div class="row" v-if="print.type=='winner'" >
+        <div class="row big" v-if="print.type=='winner'" >
         <div class="col-md-12">
 
             <div class="row" style="margin-bottom:50px">
                 <div class="col-md-12 text-center" style="margin-bottom:50px">
-                    <h1>{{vote.title}}</h1>
-                    <h1>{{vote.subtitle}}</h1>
+                    <h1 v-show="vote.ID!=3"><b>{{vote.title}}</b></h1>
+                    <h1><b>{{vote.subtitle}}</b></h1>
                     <h1>
-                        当选名单
+                        <b>当选名单</b>
                     </h1>
                 </div>
                 
@@ -403,11 +419,11 @@
 
             <div class="row" 
             style="margin-bottom:100px;" 
-            v-if="table.winner.length>20">
+            v-if="table.winner.length>999">
             <div class="col-md-12">
 
                 <div class="row"
-                style="padding-left:100px;padding-right:100px;"
+                style="padding-left:25px;padding-right:25px;"
                 v-for="i in (Math.floor(table.winner.length/6) + 1)">
                     <div 
                     class="col-md-2 text-center" 
@@ -432,10 +448,10 @@
 
             <div class="row" 
             style="margin-bottom:100px;"
-            v-if="table.winner.length<20">
+            v-if="table.winner.length<999">
             <div class="col-md-12">
                 <div class="row"
-                style="padding-left:100px;padding-right:100px;"
+                style="padding-left:25px;padding-right:25px;"
                 v-for="i in (Math.floor(table.winner.length/5) + 1)">
                     <div 
                     class="col-md-1" 
