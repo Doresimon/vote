@@ -5,130 +5,130 @@ body {
   /* font: 16px "LiSu"; */
   /* font: 16px "STLiti"; */
 }
-font-Kaiti {
+.font-Kaiti {
   font-family: "STKaiti";
 }
 
-.span-inline{
+.span-inline {
   display: inline-block;
 }
-.width-100{
+.width-100 {
   width: 100px;
 }
-.width-200{
+.width-200 {
   width: 200px;
 }
 
-.max-width-90{
+.max-width-90 {
   max-width: 90%;
 }
 
-.max-width-60{
+.max-width-60 {
   max-width: 60%;
 }
 
 .opacity-50 {
-  opacity:0.1;
+  opacity: 0.1;
 }
 
 a {
-  color: #00B7FF;
+  color: #00b7ff;
 }
 
-.fontRed{
-  color: #b50d0d
+.fontRed {
+  color: #b50d0d;
 }
-.bgRed{
-  background-color: #b50d0d
+.bgRed {
+  background-color: #b50d0d;
 }
-.bgThinRed{
+.bgThinRed {
   /* background-color: #ffeacb; */
   background-color: rgba(225, 50, 15, 0.5);
 }
 
-.font-size-x2{
+.font-size-x2 {
   font-size: 200%;
 }
-.row{
+.row {
   margin-top: 5px;
 }
 
-.round-btn-100{
+.round-btn-100 {
   width: 100px;
   height: 100px;
 }
-.round-btn-150{
+.round-btn-150 {
   width: 150px;
   height: 150px;
 }
-.round-btn-200{
+.round-btn-200 {
   width: 200px;
   height: 200px;
 }
-.span-dot{
+.span-dot {
   height: 16px;
   width: 14px;
   margin-right: 1px;
   margin-left: 1px;
 }
-.background-color-blue{
-  background-color: rgb(51, 133, 255)
+.background-color-blue {
+  background-color: rgb(51, 133, 255);
 }
-.background-color-black{
-  background-color: rgb(0, 0, 0)
+.background-color-black {
+  background-color: rgb(0, 0, 0);
 }
-.background-color-white{
-  background-color: rgb(255, 255, 255)
+.background-color-white {
+  background-color: rgb(255, 255, 255);
 }
-.background-color-red{
-  background-color: rgb(199, 0, 0)
+.background-color-red {
+  background-color: rgb(199, 0, 0);
 }
-.padding-1px{
-  padding:1px;
-  max-height:40px;
-  height:40px;
+.padding-1px {
+  padding: 1px;
+  max-height: 40px;
+  height: 40px;
 }
-.border-1px{
-  border:1px;
+.border-1px {
+  border: 1px;
 }
-.background-color-orange{
-  background-color: rgb(255, 202, 28)
+.background-color-orange {
+  background-color: rgb(255, 202, 28);
 }
-.color-success{
-  color: #67C23A
+.color-success {
+  color: #67c23a;
 }
-.shuli{ 
-  margin:0 auto;
-  width:20px;
-  line-height:24px;
-  word-break: break-all; 
-  word-wrap:break-word;
-  display:block;
+.shuli {
+  margin: 0 auto;
+  width: 20px;
+  line-height: 24px;
+  word-break: break-all;
+  word-wrap: break-word;
+  display: block;
   overflow: hidden;
-} 
-.margin-bottom-5{
+}
+.margin-bottom-5 {
   margin-bottom: 5px;
 }
-.padding-5{
+.padding-5 {
   padding: 5px;
 }
-.padding-1{
+.padding-1 {
   padding: 1px;
 }
 
-.font-size-100px{
+.font-size-100px {
   font-size: 100px;
 }
 
-.height-100p{
+.height-100p {
   height: 100%;
-  max-height: 100%
+  max-height: 100%;
 }
 
 /* Vue tables 2 */
 .VueTables__child-row-toggler {
-  width:16px;
-  height:16px;
+  width: 16px;
+  height: 16px;
   line-height: 16px;
   display: block;
   margin: auto;
@@ -136,9 +136,9 @@ a {
 }
 
 .VueTables__child-row-toggler--closed::before {
-   content: "+";
+  content: "+";
 }
 
-.VueTables__child-row-toggler--open::before  {
-    content: "-";
+.VueTables__child-row-toggler--open::before {
+  content: "-";
 }

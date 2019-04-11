@@ -201,7 +201,7 @@
                             data-toggle="tooltip"
                             :title="w"
                             >
-                                <span ><i class="el-icon-star-on"></i></span>
+                                <span><i class="el-icon-star-on"></i></span>
                             </span>
                         </template>
                     </el-table-column>
@@ -318,12 +318,15 @@
                     </div>
                 </div> -->
                 <div class="row">
-                    <div :class="[{'col-md-4':colNum==3,'col-md-6':colNum==2 }]" v-for="(v, i) in colNum" :key="i">
-                        <div class="col-md-12 margin-bottom-5" v-for="(w, j) in Math.floor((vote.num.participant+colNum-1-i)/colNum)" :key="j">
+                    <div :class="[{'col-md-4':colNum===3,'col-md-6':colNum===2 }]" v-for="(v, i) in colNum" :key="'CCC'+i">
+                        {{console.log(i)}}
+                        {{console.log(colNum)}}
+                        {{console.log((vote.num.participant+colNum-1-i)/colNum)}}
+                        <div class="col-md-12 margin-bottom-5" v-for="(w, j) in Math.floor((vote.num.participant+colNum-1-i)/colNum)" :key="'RRR'+j">
                             <button 
                             @click="toggleTicket(Math.floor((vote.num.participant+colNum-1)/colNum)*i+j)"
                             type="button" 
-                            :class="['btn','btn-lg','btn-block',
+                            :class="['btn','btn-sm','btn-block',
                             { 'btn-secondary': add.value[Math.floor((vote.num.participant+colNum-1)/colNum)*i+j]==0,
                               'btn-outline-success': add.value[Math.floor((vote.num.participant+colNum-1)/colNum)*i+j]==1,
                               'btn-danger': add.value[Math.floor((vote.num.participant+colNum-1)/colNum)*i+j]==-1, }]"

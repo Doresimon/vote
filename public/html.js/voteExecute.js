@@ -106,6 +106,10 @@ var app = new Vue({
             .then(function (response) { // handle success
                 console.log(response.data);
                 _this.vote = JSON.stringify(response.data.vote)=="{}" ? _this.vote:response.data.vote
+                _this.vote.num.executer = parseInt(_this.vote.num.executer);
+                _this.vote.num.participant = parseInt(_this.vote.num.participant);
+                _this.vote.num.target = parseInt(_this.vote.num.target);
+                _this.vote.num.voter = parseInt(_this.vote.num.voter);
                 
                 let str = ''
                 _this.vote.participant.forEach(element => {
@@ -535,7 +539,7 @@ var app = new Vue({
         await this.getTicketList()
         this.setAllTicket(1)
         this.calTicketSum()
-        this.colNum = this.vote.num.participant<=20 ? 2:3
+        this.colNum = this.vote.num.participant <= 20 ? 2:3
         this.participantStr = this.vote.participant.join(".")
         if (this.user.role == "admin") {
             this.sw.show.btn.addTicket  =   true

@@ -29,6 +29,11 @@ var app = new Vue({
             _this.busy = true
             let ele = "#MODAL-ADD-VOTE"
             let D = _this.add
+
+            D.num.executer = parseInt(D.num.executer);
+            D.num.participant = parseInt(D.num.participant);
+            D.num.target = parseInt(D.num.target);
+            D.num.voter = parseInt(D.num.voter);
  
             axios.post('/api/vote/addVote', D)
             .then(function (response) { // handle success
