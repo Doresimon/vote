@@ -319,9 +319,7 @@
                 </div> -->
                 <div class="row">
                     <div :class="[{'col-md-4':colNum===3,'col-md-6':colNum===2 }]" v-for="(v, i) in colNum" :key="'CCC'+i">
-                        {{console.log(i)}}
-                        {{console.log(colNum)}}
-                        {{console.log((vote.num.participant+colNum-1-i)/colNum)}}
+                        
                         <div class="col-md-12 margin-bottom-5" v-for="(w, j) in Math.floor((vote.num.participant+colNum-1-i)/colNum)" :key="'RRR'+j">
                             <button 
                             @click="toggleTicket(Math.floor((vote.num.participant+colNum-1)/colNum)*i+j)"
