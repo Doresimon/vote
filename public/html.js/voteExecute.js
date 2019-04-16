@@ -80,7 +80,7 @@ var app = new Vue({
                 }
             }
         },
-        colNum:3,
+        colNum:4,
         addExtraStr: '',
     },
     methods: {
@@ -539,7 +539,7 @@ var app = new Vue({
         await this.getTicketList()
         this.setAllTicket(1)
         this.calTicketSum()
-        this.colNum = this.vote.num.participant <= 20 ? 2:3
+        // this.colNum = this.vote.num.participant <= 20 ? 2:3
         this.participantStr = this.vote.participant.join(".")
         if (this.user.role == "admin") {
             this.sw.show.btn.addTicket  =   true
