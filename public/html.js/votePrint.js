@@ -293,11 +293,13 @@ var app = new Vue({
             sortOther.sort(this.desc_cnt)
             this.table.printOtherData.left = []
             this.table.printOtherData.right = []
+
+            const half = Math.ceil(sortOther.length /2)
             for (let i = 0; i < sortOther.length; i++) {
-                if (i>=6) {
-                    break
-                }
-                if(i<3){
+                // if (i>=6) {
+                //     break
+                // }
+                if(i<half){
                     this.table.printOtherData.left.push(sortOther[i])
                 }else{
                     this.table.printOtherData.right.push(sortOther[i])
