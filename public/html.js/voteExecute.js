@@ -93,11 +93,11 @@ var app = new Vue({
             $(ele).modal("hide")
         },
         getVoteInfo () {
-            let _this = this
-            _this.busy = true
+            let _ = this
+            _.busy = true
 
             let D = {
-                ID:_this.vote.ID
+                ID:_.vote.ID
             }
  
             let p = new Promise(function (resolve, reject){
@@ -105,23 +105,23 @@ var app = new Vue({
             axios.post('/api/vote/getVoteInfo', D)
             .then(function (response) { // handle success
                 console.log(response.data);
-                _this.vote = JSON.stringify(response.data.vote)=="{}" ? _this.vote:response.data.vote
-                _this.vote.num.executer = parseInt(_this.vote.num.executer);
-                _this.vote.num.participant = parseInt(_this.vote.num.participant);
-                _this.vote.num.target = parseInt(_this.vote.num.target);
-                _this.vote.num.voter = parseInt(_this.vote.num.voter);
+                _.vote = JSON.stringify(response.data.vote)=="{}" ? _.vote:response.data.vote
+                _.vote.num.executer = parseInt(_.vote.num.executer);
+                _.vote.num.participant = parseInt(_.vote.num.participant);
+                _.vote.num.target = parseInt(_.vote.num.target);
+                _.vote.num.voter = parseInt(_.vote.num.voter);
                 
                 let str = ''
-                _this.vote.participant.forEach(element => {
+                _.vote.participant.forEach(element => {
                     str += element.substring(0,1)
                 });
-                _this.table.options.headings['participant'] = str
+                _.table.options.headings['participant'] = str
                 
-                _this.setFilter()
+                _.setFilter()
 
-                _this.$notify({
+                _.$notify({
                     title: '选票信息',
-                    message: '参选人 ' + _this.vote.participant.length + ' 人',
+                    message: '参选人 ' + _.vote.participant.length + ' 人',
                     type: 'info'
                   });
                 
@@ -131,19 +131,16 @@ var app = new Vue({
                 console.log(error);
             })
             .then(function () {         // always executed
-                _this.busy = false
+                _.busy = false
             });
 
             })
             return p
         },
         addOther () {
-            if (this.participantStr.indexOf(this.add.otherName)!=-1) {
-                this.$notify({
-                    title: '无法添加',
-                    message: '该候选人已存在',
-                    type: 'danger'
-                  });
+            this.add.otherName = this.add.otherName.trim()
+            if (this.participantStr.includes(this.add.otherName) || this.add.other.includes(this.add.otherName)) {
+                this.$notify({title: '无法添加', message: '该候选人已存在', type: 'danger'});
                 this.add.otherName = ""
                 return
             }
@@ -165,6 +162,8 @@ var app = new Vue({
 
             axios.post('/api/vote/addTicket', D)
             .then(function (response) { // handle success
+                if (response.data.code==='blocked') return;
+
                 console.log(response.data);
                 _this.add.ID = response.data.code.ID
                 _this.add.executer = response.data.code.executer
@@ -200,6 +199,7 @@ var app = new Vue({
                 console.log(error);
             })
             .then(function () {         // always executed
+                // console.log("Finally")
                 _this.busy = false
             });
 

@@ -142,3 +142,7 @@ a {
 .VueTables__child-row-toggler--open::before {
   content: "-";
 }
+
+.keep-space {
+  white-space: pre
+}
