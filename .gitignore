@@ -63,3 +63,6 @@ typings/
 
 # leveldb data
 LEVELDB
+
+### info file
+nameList.txt
