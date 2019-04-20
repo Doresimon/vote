@@ -63,8 +63,10 @@ var app = new Vue({
         },
         ticketSum:[],
         ticketList:[],
-        order:  true,
-        busy:   false,
+        order:      true,
+        busy:       false,
+        sum_show:   true,
+        table_show: true,
         participantStr: "",
         sw:{
             show:{
@@ -84,6 +86,12 @@ var app = new Vue({
         addExtraStr: '',
     },
     methods: {
+        toggleSumShow(){
+            this.sum_show = !this.sum_show
+        },
+        toggleTableShow(){
+            this.table_show = !this.table_show
+        },
         callModal (ele) {
             this.add.other = []
             this.setAllTicket(1)

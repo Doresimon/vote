@@ -115,8 +115,18 @@
                     >
                     <i class="el-icon-plus font-size-x2"></i>
                     </button> -->
+                    <button 
+                    @click="toggleSumShow()"
+                    type="button"
+                    data-toggle="tooltip"
+                    title="显示/隐藏票数统计"
+                    class="btn btn-link "
+                    >
+                    <i class="el-icon-view font-size-x2"></i>
+                    </button>
                 </h3>
             </div>
+            <template v-if="sum_show===true">
             <div class="col-md-2 margin-bottom-5" v-for="(v, i) in ticketSum">
                 <div class="input-group">
                     <div class="input-group-prepend">
@@ -141,6 +151,7 @@
                     </div>
                 </div>
             </div>
+            </template>
         </div>
 
         <!-- element ui table -->
@@ -150,9 +161,19 @@
                     <span><i class="el-icon-star-on"></i>=赞成</span>, 
                     <span><i class="el-icon-star-off"></i>=弃权</span>, 
                     <span style="color:rgb(223, 0, 0)"><i class="el-icon-star-on"></i>=反对</span>
+                    
+                    <button 
+                    @click="toggleTableShow()"
+                    type="button"
+                    data-toggle="tooltip"
+                    title="显示/隐藏选票详情"
+                    class="btn btn-link "
+                    >
+                    <i class="el-icon-view font-size-x2"></i>
+                    </button>
                 </h3>
             </div>
-            <div class="col-md-12" >
+            <div class="col-md-12" v-if="table_show===true">
                 <el-table
                 :data="table.data"
                 stripe 
